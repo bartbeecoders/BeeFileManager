@@ -88,6 +88,26 @@ fn terminal_directory_argument_preserves_native_path_bytes() {
 }
 
 #[test]
+fn cursor_opens_local_folders_but_not_trash_or_remote() {
+    assert!(can_open_cursor(&Location::local("/fixture/project")));
+    assert!(!can_open_cursor(&Location::uri("trash:///")));
+    assert!(!can_open_cursor(&Location::uri("smb://server/share")));
+}
+
+#[cfg(unix)]
+#[test]
+fn cursor_command_preserves_native_path_bytes() {
+    use std::{ffi::OsStr, os::unix::ffi::OsStrExt};
+
+    let path = Path::new(OsStr::from_bytes(b"/tmp/non-utf8-\xff"));
+    let command = cursor_command(path);
+    let argument = command.get_args().next().expect("cursor folder argument");
+
+    assert_eq!(command.get_program(), OsStr::new("cursor"));
+    assert_eq!(argument.as_encoded_bytes(), b"/tmp/non-utf8-\xff");
+}
+
+#[test]
 fn global_activity_uses_the_latest_active_label() {
     let mut activity = GlobalActivityState::default();
     let connecting = activity.begin("Connecting…");

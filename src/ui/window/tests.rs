@@ -6,7 +6,7 @@ use crate::services::{BuildKind, ReleaseMetadata};
 
 use super::{
     MediaRelease, MouseHistoryAction, PinStatus, STANDARD_PLACE_IDS, begin_media_release,
-    is_open_terminal_shortcut, is_sidebar_focus_shortcut, is_smb_location,
+    is_open_cursor_shortcut, is_open_terminal_shortcut, is_sidebar_focus_shortcut, is_smb_location,
     is_standard_place_location, is_toggle_hidden_shortcut, is_undo_shortcut, media_release_label,
     mount_release_action, mouse_history_action, page_direction, parse_pinned_drag_source,
     parse_pinned_places, pin_status, remove_pinned_place, reorder_pinned_places, reorder_places,
@@ -74,6 +74,30 @@ fn open_terminal_shortcut_requires_only_control() {
     ));
     assert!(!is_open_terminal_shortcut(gtk::gdk::Key::t, control | alt));
     assert!(!is_open_terminal_shortcut(gtk::gdk::Key::F4, control));
+}
+
+#[test]
+fn open_cursor_shortcut_requires_c_without_control_or_alt() {
+    let control = gtk::gdk::ModifierType::CONTROL_MASK;
+    let shift = gtk::gdk::ModifierType::SHIFT_MASK;
+    let alt = gtk::gdk::ModifierType::ALT_MASK;
+
+    assert!(is_open_cursor_shortcut(
+        gtk::gdk::Key::c,
+        gtk::gdk::ModifierType::empty()
+    ));
+    assert!(is_open_cursor_shortcut(
+        gtk::gdk::Key::C,
+        gtk::gdk::ModifierType::empty()
+    ));
+    assert!(is_open_cursor_shortcut(gtk::gdk::Key::c, shift));
+    assert!(!is_open_cursor_shortcut(gtk::gdk::Key::c, control));
+    assert!(!is_open_cursor_shortcut(gtk::gdk::Key::c, alt));
+    assert!(!is_open_cursor_shortcut(gtk::gdk::Key::c, control | shift));
+    assert!(!is_open_cursor_shortcut(
+        gtk::gdk::Key::t,
+        gtk::gdk::ModifierType::empty()
+    ));
 }
 
 #[test]

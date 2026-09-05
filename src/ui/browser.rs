@@ -986,9 +986,23 @@ impl BrowserView {
     }
 
     pub fn open_terminal(&self) {
+        let Some(location) = self.target_folder_location() else {
+            return;
+        };
+        launch_terminal(&location, &self.state.overlay);
+    }
+
+    pub fn open_cursor(&self) {
+        let Some(location) = self.target_folder_location() else {
+            return;
+        };
+        launch_cursor(&location, &self.state.overlay);
+    }
+
+    fn target_folder_location(&self) -> Option<Location> {
         self.state.sync_mode_selection();
         let selected = self.state.browser.selected_entries();
-        let location = selected_terminal_location(&selected).or_else(|| {
+        selected_terminal_location(&selected).or_else(|| {
             let mode = self.view_mode();
             let depth = if mode == BrowserMode::Columns {
                 terminal_destination_depth(
@@ -1001,11 +1015,7 @@ impl BrowserView {
                 self.state.browser.active_depth()
             };
             depth.and_then(|depth| self.state.browser.location_at(depth))
-        });
-        let Some(location) = location else {
-            return;
-        };
-        launch_terminal(&location, &self.state.overlay);
+        })
     }
 
     pub fn refresh(&self) {
@@ -6454,6 +6464,7 @@ pub(super) fn install_folder_context_menu(
     let new_file = context_menu_option(crate::assets::icons::FILE_PLUS, "New File", "");
     let open_terminal =
         context_menu_option(crate::assets::icons::TERMINAL, "Open in Terminal", "Ctrl+T");
+    let open_cursor = context_menu_option(crate::assets::icons::FILE_CODE, "Open in Cursor", "C");
     let paste = context_menu_option(crate::assets::icons::CLIPBOARD_PASTE, "Paste", "Ctrl+V");
     let select_all = context_menu_option(crate::assets::icons::LIST_CHECKS, "Select All", "Ctrl+A");
     let refresh = context_menu_option(crate::assets::icons::REFRESH, "Refresh", "F5");
@@ -6475,6 +6486,7 @@ pub(super) fn install_folder_context_menu(
     content.append(&new_folder);
     content.append(&new_file);
     content.append(&open_terminal);
+    content.append(&open_cursor);
     content.append(&gtk::Separator::new(gtk::Orientation::Horizontal));
     content.append(&paste);
     content.append(&select_all);
@@ -6578,6 +6590,17 @@ pub(super) fn install_folder_context_menu(
             launch_terminal(&terminal_location, &state.overlay);
         }
     });
+    let weak = Rc::downgrade(state);
+    let cursor_popover = popover.downgrade();
+    let cursor_location = location.clone();
+    open_cursor.connect_clicked(move |_| {
+        if let Some(popover) = cursor_popover.upgrade() {
+            popover.popdown();
+        }
+        if let Some(state) = weak.upgrade() {
+            launch_cursor(&cursor_location, &state.overlay);
+        }
+    });
 
     let menu_click = gtk::GestureClick::new();
     menu_click.set_button(3);
@@ -6601,6 +6624,7 @@ pub(super) fn install_folder_context_menu(
         }));
         select_all.set_sensitive(has_entries());
         open_terminal.set_sensitive(can_open_terminal(&location));
+        open_cursor.set_sensitive(can_open_cursor(&location));
         let hidden_files_shown = browser_for_click.preferences().show_hidden;
         toggle_hidden_label.set_text(if hidden_files_shown {
             "Hide Hidden Files"
@@ -6665,6 +6689,7 @@ pub(super) fn install_item_context_menu(
     let open = item_context_option(crate::assets::icons::EXTERNAL_LINK, "Open", "↵");
     let open_terminal =
         item_context_option(crate::assets::icons::TERMINAL, "Open in Terminal", "Ctrl+T");
+    let open_cursor = item_context_option(crate::assets::icons::FILE_CODE, "Open in Cursor", "C");
     let preview = item_context_option(crate::assets::icons::EYE, "Quick preview", "Space");
     let print = item_context_option(crate::assets::icons::PRINTER, "Print", "");
     let restore = item_context_option(crate::assets::icons::FOLDER, "Restore", "");
@@ -6701,6 +6726,7 @@ pub(super) fn install_item_context_menu(
     let extract_to = item_context_option(crate::assets::icons::FILE_ARCHIVE, "Extract to…", "");
     single.append(&open);
     single.append(&open_terminal);
+    single.append(&open_cursor);
     single.append(&preview);
     single.append(&print);
     single.append(&restore);
@@ -6831,6 +6857,20 @@ pub(super) fn install_item_context_menu(
         };
         if let Some(state) = weak.upgrade() {
             launch_terminal(&entry.location, &state.overlay);
+        }
+    });
+    let weak = Rc::downgrade(state);
+    let cursor_target = target.clone();
+    let cursor_popover = popover.downgrade();
+    open_cursor.connect_clicked(move |_| {
+        if let Some(popover) = cursor_popover.upgrade() {
+            popover.popdown();
+        }
+        let Some((_, entry)) = cursor_target.borrow().clone() else {
+            return;
+        };
+        if let Some(state) = weak.upgrade() {
+            launch_cursor(&entry.location, &state.overlay);
         }
     });
     let weak = Rc::downgrade(state);
@@ -6984,6 +7024,7 @@ pub(super) fn install_item_context_menu(
         preview.set_visible(entry_supports_quick_preview(&entry));
         print.set_visible(entry_supports_printing(&entry));
         open_terminal.set_visible(entry.is_directory() && can_open_terminal(&entry.location));
+        open_cursor.set_visible(entry.is_directory() && can_open_cursor(&entry.location));
         let trash_visible = move_to_trash_is_visible(in_trash, state.browser.can_trash_at(depth));
         move_to_trash.set_visible(trash_visible);
         trash_multiple.set_visible(trash_visible);
@@ -10246,6 +10287,14 @@ pub(super) fn open_location(location: &Location, parent: &impl IsA<gtk::Widget>)
 }
 
 fn can_open_terminal(location: &Location) -> bool {
+    can_open_local_folder(location)
+}
+
+fn can_open_cursor(location: &Location) -> bool {
+    can_open_local_folder(location)
+}
+
+fn can_open_local_folder(location: &Location) -> bool {
     location.native_path().is_some() && !is_trash_location(location)
 }
 
@@ -10293,6 +10342,44 @@ pub(super) fn launch_terminal(location: &Location, parent: &impl IsA<gtk::Widget
     if let Err(error) = result {
         tracing::warn!(%error, "unable to launch terminal");
         show_error_dialog(parent, "Unable to open terminal", &error.to_string());
+    }
+}
+
+fn cursor_command(path: &Path) -> Command {
+    let mut command = Command::new("cursor");
+    command
+        .arg(path)
+        .stdin(Stdio::null())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null());
+    command
+}
+
+pub(super) fn launch_cursor(location: &Location, parent: &impl IsA<gtk::Widget>) {
+    let Some(path) = location.native_path() else {
+        show_error_dialog(
+            parent,
+            "Unable to open Cursor",
+            "This location is not a local folder",
+        );
+        return;
+    };
+    if is_trash_location(location) {
+        show_error_dialog(
+            parent,
+            "Unable to open Cursor",
+            "Cursor cannot be opened in Trash",
+        );
+        return;
+    }
+    let path = path.to_path_buf();
+    tracing::debug!(
+        location = %location.diagnostic_path(),
+        "opening cursor"
+    );
+    if let Err(error) = cursor_command(&path).spawn() {
+        tracing::warn!(%error, "unable to launch cursor");
+        show_error_dialog(parent, "Unable to open Cursor", &error.to_string());
     }
 }
 

@@ -2295,6 +2295,7 @@ fn keybindings_page() -> gtk::Widget {
     for (label, keys) in [
         ("Search", "Ctrl + K"),
         ("Open terminal", "Ctrl + T"),
+        ("Open in Cursor", "C"),
         ("Refresh", "F5 / Ctrl + R"),
         ("Open settings", "Ctrl + ,"),
     ] {

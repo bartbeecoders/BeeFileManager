@@ -781,6 +781,10 @@ fn install_keyboard_navigation(
         if !text_has_focus && is_undo_shortcut(key, modifiers) && view.undo_last_operation() {
             return glib::Propagation::Stop;
         }
+        if view.item_view_has_focus() && is_open_cursor_shortcut(key, modifiers) {
+            view.open_cursor();
+            return glib::Propagation::Stop;
+        }
         if view.item_view_has_focus()
             && let Some(query) = type_to_search_query(key, modifiers)
             && type_to_search.show(query)
@@ -1012,6 +1016,11 @@ fn is_open_terminal_shortcut(key: gtk::gdk::Key, modifiers: gtk::gdk::ModifierTy
         && !modifiers
             .intersects(gtk::gdk::ModifierType::SHIFT_MASK | gtk::gdk::ModifierType::ALT_MASK)
         && matches!(key, gtk::gdk::Key::t | gtk::gdk::Key::T)
+}
+
+fn is_open_cursor_shortcut(key: gtk::gdk::Key, modifiers: gtk::gdk::ModifierType) -> bool {
+    !modifiers.intersects(gtk::gdk::ModifierType::CONTROL_MASK | gtk::gdk::ModifierType::ALT_MASK)
+        && matches!(key, gtk::gdk::Key::c | gtk::gdk::Key::C)
 }
 
 fn is_toggle_hidden_shortcut(key: gtk::gdk::Key, modifiers: gtk::gdk::ModifierType) -> bool {
