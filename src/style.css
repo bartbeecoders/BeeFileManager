@@ -3575,6 +3575,117 @@ menubutton.grid-thumbnail-menu > button:focus-visible {
   padding-top: 5px;
 }
 
+.cleanup-split > separator {
+  background: alpha(@theme_border, 0.6);
+  min-height: 5px;
+}
+
+.cleanup-pane {
+  background: @theme_surface;
+  border-top: 1px solid alpha(@theme_border, 0.6);
+  color: @theme_text;
+  min-height: 180px;
+}
+
+.cleanup-header,
+.cleanup-toolbar,
+.cleanup-footer {
+  padding: 8px 12px;
+}
+
+.cleanup-header,
+.cleanup-toolbar {
+  border-bottom: 1px solid alpha(@theme_border, 0.4);
+}
+
+.cleanup-footer {
+  border-top: 1px solid alpha(@theme_border, 0.4);
+}
+
+.cleanup-title {
+  color: @theme_text;
+  font-weight: 700;
+}
+
+.cleanup-status,
+.cleanup-summary,
+.cleanup-detail,
+.cleanup-meta {
+  color: @theme_dim_text;
+}
+
+.cleanup-spinner {
+  color: @theme_accent;
+}
+
+.cleanup-tab,
+.cleanup-header-button,
+.cleanup-footer-button,
+.cleanup-filter {
+  background: @theme_bg;
+  border: 1px solid alpha(@theme_border, 0.6);
+  border-radius: 5px;
+  color: @theme_text;
+}
+
+.cleanup-tab:hover,
+.cleanup-header-button:hover,
+.cleanup-footer-button:hover {
+  background: alpha(@theme_accent, 0.15);
+}
+
+.cleanup-tab:checked {
+  background: alpha(@theme_accent, 0.22);
+  border-color: @theme_accent;
+  color: @theme_accent;
+}
+
+.cleanup-filter-entry {
+  background: @theme_bg;
+  border: 1px solid alpha(@theme_border, 0.6);
+  border-radius: 5px;
+  color: @theme_text;
+}
+
+.cleanup-filter-entry:focus {
+  border-color: @theme_accent;
+}
+
+.cleanup-scroll,
+.cleanup-scroll viewport,
+.cleanup-list {
+  background: @theme_bg;
+}
+
+.cleanup-row {
+  min-height: 36px;
+  padding: 4px 10px;
+}
+
+.cleanup-name {
+  color: @theme_text;
+}
+
+.cleanup-confidence-high {
+  color: @theme_accent;
+}
+
+.cleanup-confidence-medium {
+  color: @theme_highlight;
+}
+
+.cleanup-confidence-low {
+  color: @theme_danger;
+}
+
+.cleanup-check {
+  color: @theme_accent;
+}
+
+.cleanup-footer-button:disabled {
+  color: @theme_dim_text;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition-duration: 1ms;

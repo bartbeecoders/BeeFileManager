@@ -3,6 +3,7 @@
 mod blur;
 mod browser;
 mod browser_modes;
+mod cleanup;
 mod controls;
 mod entry_list_model;
 mod inline_search;
