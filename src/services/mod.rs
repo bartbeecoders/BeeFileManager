@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+mod cleanup;
 mod file_source;
 mod install_source;
 mod operations;
@@ -35,6 +36,9 @@ pub(crate) use preview::{
 // `update_check` (which imports them directly from `release_channel`) has any
 // business calling it. Widening this re-export would make that bypass
 // reachable from UI code.
+pub(crate) use cleanup::{
+    Confidence, ScanEvent, ScanHandle, ScanResult, default_options, start_scan,
+};
 pub(crate) use release_channel::{BuildKind, Channel, Version};
 pub(crate) use search::{SearchEvent, SearchHandle, SearchItem, index_tree};
 pub(crate) use update_check::{

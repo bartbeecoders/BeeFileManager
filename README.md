@@ -52,6 +52,7 @@ BeeFileManager combines spatial Miller-column navigation with familiar Grid and 
 - **Rich previews and thumbnails:** bounded previews for text, source code, images, camera RAW, PDF, audio, and video, with native parser-backed formats isolated from the application.
 - **Responsive filesystem work:** cancellable directory loading, bounded streaming, incremental monitoring, stable selection, and virtualized large directories.
 - **Everyday file operations:** create folders, rename, cut, copy, paste, trash, permanent delete, sorting, hidden files, pins, and history.
+- **Cleanup pane:** scan the current folder for regenerable build artifacts and duplicate files, then trash the ones you select.
 - **Remote locations:** browse GIO/GVfs locations such as authenticated SMB shares from the location field.
 - **Adaptive appearance:** compact or airy density, six bundled themes, custom themes, and live Omarchy Quattro theme following.
 - **Updates in the app:** opt-in automatic checks, release notes, verified downloads, and in-place installation for release binaries.

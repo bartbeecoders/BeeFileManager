@@ -6465,6 +6465,7 @@ pub(super) fn install_folder_context_menu(
     let open_terminal =
         context_menu_option(crate::assets::icons::TERMINAL, "Open in Terminal", "Ctrl+T");
     let open_cursor = context_menu_option(crate::assets::icons::FILE_CODE, "Open in Cursor", "C");
+    let cleanup = context_menu_option(crate::assets::icons::ERASER, "Clean Up…", "Ctrl+Shift+E");
     let paste = context_menu_option(crate::assets::icons::CLIPBOARD_PASTE, "Paste", "Ctrl+V");
     let select_all = context_menu_option(crate::assets::icons::LIST_CHECKS, "Select All", "Ctrl+A");
     let refresh = context_menu_option(crate::assets::icons::REFRESH, "Refresh", "F5");
@@ -6487,6 +6488,7 @@ pub(super) fn install_folder_context_menu(
     content.append(&new_file);
     content.append(&open_terminal);
     content.append(&open_cursor);
+    content.append(&cleanup);
     content.append(&gtk::Separator::new(gtk::Orientation::Horizontal));
     content.append(&paste);
     content.append(&select_all);
@@ -6601,6 +6603,14 @@ pub(super) fn install_folder_context_menu(
             launch_cursor(&cursor_location, &state.overlay);
         }
     });
+    let cleanup_popover = popover.downgrade();
+    let cleanup_location = location.clone();
+    cleanup.connect_clicked(move |button| {
+        if let Some(popover) = cleanup_popover.upgrade() {
+            popover.popdown();
+        }
+        activate_cleanup(button.upcast_ref(), &cleanup_location);
+    });
 
     let menu_click = gtk::GestureClick::new();
     menu_click.set_button(3);
@@ -6690,6 +6700,7 @@ pub(super) fn install_item_context_menu(
     let open_terminal =
         item_context_option(crate::assets::icons::TERMINAL, "Open in Terminal", "Ctrl+T");
     let open_cursor = item_context_option(crate::assets::icons::FILE_CODE, "Open in Cursor", "C");
+    let cleanup = item_context_option(crate::assets::icons::ERASER, "Clean Up…", "Ctrl+Shift+E");
     let preview = item_context_option(crate::assets::icons::EYE, "Quick preview", "Space");
     let print = item_context_option(crate::assets::icons::PRINTER, "Print", "");
     let restore = item_context_option(crate::assets::icons::FOLDER, "Restore", "");
@@ -6727,6 +6738,7 @@ pub(super) fn install_item_context_menu(
     single.append(&open);
     single.append(&open_terminal);
     single.append(&open_cursor);
+    single.append(&cleanup);
     single.append(&preview);
     single.append(&print);
     single.append(&restore);
@@ -6872,6 +6884,17 @@ pub(super) fn install_item_context_menu(
         if let Some(state) = weak.upgrade() {
             launch_cursor(&entry.location, &state.overlay);
         }
+    });
+    let cleanup_target = target.clone();
+    let cleanup_popover = popover.downgrade();
+    cleanup.connect_clicked(move |button| {
+        if let Some(popover) = cleanup_popover.upgrade() {
+            popover.popdown();
+        }
+        let Some((_, entry)) = cleanup_target.borrow().clone() else {
+            return;
+        };
+        activate_cleanup(button.upcast_ref(), &entry.location);
     });
     let weak = Rc::downgrade(state);
     let pin_target = target.clone();
@@ -7025,6 +7048,7 @@ pub(super) fn install_item_context_menu(
         print.set_visible(entry_supports_printing(&entry));
         open_terminal.set_visible(entry.is_directory() && can_open_terminal(&entry.location));
         open_cursor.set_visible(entry.is_directory() && can_open_cursor(&entry.location));
+        cleanup.set_visible(entry.is_directory() && entry.location.native_path().is_some());
         let trash_visible = move_to_trash_is_visible(in_trash, state.browser.can_trash_at(depth));
         move_to_trash.set_visible(trash_visible);
         trash_multiple.set_visible(trash_visible);
@@ -10353,6 +10377,19 @@ fn cursor_command(path: &Path) -> Command {
         .stdout(Stdio::null())
         .stderr(Stdio::null());
     command
+}
+
+fn activate_cleanup(widget: &gtk::Widget, location: &Location) {
+    let Some(path) = location.native_path() else {
+        show_error_dialog(
+            widget,
+            "Cleanup needs a local folder",
+            "Network locations and Trash cannot be scanned for artifacts or duplicates.",
+        );
+        return;
+    };
+    let path = path.to_string_lossy().into_owned();
+    let _ = widget.activate_action("win.cleanup", Some(&path.to_variant()));
 }
 
 pub(super) fn launch_cursor(location: &Location, parent: &impl IsA<gtk::Widget>) {

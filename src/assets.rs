@@ -28,6 +28,7 @@ pub mod icons {
     pub const DOCUMENTS: &str = "beefilemanager-file-text";
     pub const DOWNLOADS: &str = "beefilemanager-download";
     pub const EJECT: &str = "beefilemanager-eject";
+    pub const ERASER: &str = "beefilemanager-eraser";
     pub const EYE: &str = "beefilemanager-eye";
     pub const EYE_OFF: &str = "beefilemanager-eye-off";
     pub const EXTERNAL_LINK: &str = "beefilemanager-external-link";

@@ -24,6 +24,7 @@ use super::{
     blur::BlurBin,
     browser::{BrowserView, PeekBehavior, PinStatus, show_error_dialog},
     browser_modes::{BrowserDensity, BrowserMode},
+    cleanup::CleanupPane,
     motion::{animations_enabled, emphasized_deceleration},
     preview::PreviewDrawer,
     search::SearchDialog,
@@ -73,6 +74,21 @@ pub fn present_location(application: &gtk::Application, location: Option<PathBuf
         Vec::new(),
         false,
     );
+}
+
+fn start_cleanup(pane: &CleanupPane, view: &BrowserView) {
+    let Some(location) = view.browser().active_location() else {
+        return;
+    };
+    let Some(path) = location.native_path().map(PathBuf::from) else {
+        show_error_dialog(
+            &view.widget(),
+            "Cleanup needs a local folder",
+            "Network locations and Trash cannot be scanned for artifacts or duplicates.",
+        );
+        return;
+    };
+    pane.scan(path);
 }
 
 /// Opens the window an `org.freedesktop.FileManager1` caller asked for: the
@@ -166,6 +182,14 @@ fn present_target(
         20,
     )));
     search_button.add_css_class("header-action");
+    let cleanup_button = gtk::Button::builder()
+        .tooltip_text("Clean up this folder (Ctrl+Shift+E)")
+        .build();
+    cleanup_button.set_child(Some(&crate::assets::primary_icon(
+        crate::assets::icons::ERASER,
+        20,
+    )));
+    cleanup_button.add_css_class("header-action");
     let appearance = build_appearance_menu(&browser, &controller, theme_manager.clone());
     let settings = gtk::Button::builder().tooltip_text("Settings").build();
     settings.set_child(Some(&crate::assets::primary_icon(
@@ -184,6 +208,7 @@ fn present_target(
     let header_actions = gtk::Box::new(gtk::Orientation::Horizontal, 0);
     header_actions.add_css_class("header-actions");
     header_actions.append(&search_button);
+    header_actions.append(&cleanup_button);
     header_actions.append(&appearance);
     header_actions.append(&settings);
     header_actions.append(&close_window);
@@ -261,7 +286,49 @@ fn present_target(
         &preview_split,
         Rc::new(move || measured_content.position() + measured_browser.preview_occupied_width()),
     );
-    root.append(&preview_split);
+
+    let reveal_browser = browser.clone();
+    let trash_browser = browser.clone();
+    let cleanup = CleanupPane::new(
+        Rc::new(move |path, is_directory| {
+            if is_directory {
+                reveal_browser.navigate_location(Location::local(path));
+                return;
+            }
+            let Some(parent) = path.parent() else {
+                return;
+            };
+            let name = path
+                .file_name()
+                .map(|name| name.to_string_lossy().into_owned())
+                .unwrap_or_default();
+            reveal_browser.navigate_location(Location::local(parent));
+            if !name.is_empty() {
+                reveal_browser.select_after_load(vec![name], false);
+            }
+        }),
+        Rc::new(move |entries| {
+            trash_browser.browser().delete(entries, false);
+        }),
+    );
+    let cleanup_for_events = cleanup.clone();
+    controller.observe(move |event| {
+        if matches!(event, BrowserEvent::DeletionFinished) {
+            cleanup_for_events.note_deletion_finished();
+        }
+    });
+    let vertical_split = gtk::Paned::new(gtk::Orientation::Vertical);
+    vertical_split.add_css_class("cleanup-split");
+    vertical_split.set_wide_handle(false);
+    vertical_split.set_resize_start_child(true);
+    vertical_split.set_resize_end_child(false);
+    vertical_split.set_shrink_start_child(false);
+    vertical_split.set_shrink_end_child(true);
+    vertical_split.set_start_child(Some(&preview_split));
+    vertical_split.set_end_child(Some(&cleanup.widget()));
+    vertical_split.set_vexpand(true);
+    cleanup.attach_split(&vertical_split);
+    root.append(&vertical_split);
 
     let mouse_history = gtk::GestureClick::new();
     mouse_history.set_button(0);
@@ -349,6 +416,29 @@ fn present_target(
     });
     window.add_action(&search_action);
     application.set_accels_for_action("win.search", &["<Control>k"]);
+
+    let cleanup_for_button = cleanup.clone();
+    let cleanup_button_view = browser.clone();
+    cleanup_button.connect_clicked(move |_| {
+        start_cleanup(&cleanup_for_button, &cleanup_button_view);
+    });
+    let cleanup_from_path = cleanup.clone();
+    let cleanup_action = gio::SimpleAction::new("cleanup", Some(glib::VariantTy::STRING));
+    cleanup_action.connect_activate(move |_, value| {
+        let Some(path) = value.and_then(|variant| variant.str().map(PathBuf::from)) else {
+            return;
+        };
+        cleanup_from_path.scan(path);
+    });
+    window.add_action(&cleanup_action);
+    let cleanup_here_pane = cleanup.clone();
+    let cleanup_here_view = browser.clone();
+    let cleanup_here_action = gio::SimpleAction::new("cleanup-here", None);
+    cleanup_here_action.connect_activate(move |_, _| {
+        start_cleanup(&cleanup_here_pane, &cleanup_here_view);
+    });
+    window.add_action(&cleanup_here_action);
+    application.set_accels_for_action("win.cleanup-here", &["<Primary><Shift>e"]);
 
     let terminal_view = browser.clone();
     let terminal_action = gio::SimpleAction::new("open-terminal", None);
