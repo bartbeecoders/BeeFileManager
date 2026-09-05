@@ -1695,7 +1695,7 @@ fn media_error_feedback(message: &str) -> (&'static str, String, Option<&'static
     {
         return (
             "Additional media support required",
-            "On Arch or Omarchy, install the required GStreamer plugins, then restart Strata."
+            "On Arch or Omarchy, install the required GStreamer plugins, then restart BeeFileManager."
                 .to_owned(),
             Some(MEDIA_PLUGIN_INSTALL_COMMAND),
         );

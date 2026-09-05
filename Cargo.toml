@@ -1,11 +1,11 @@
 [package]
-name = "strata"
+name = "beefilemanager"
 version = "0.10.0"
 edition = "2024"
 description = "A fast, keyboard-first file manager for Linux"
-authors = ["LGSE Ltd."]
+authors = ["bartbeecoders"]
 license = "GPL-3.0-or-later"
-repository = "https://github.com/LGSE/strata"
+repository = "https://github.com/bartbeecoders/BeeFileManager"
 keywords = ["file-manager", "gtk4", "linux", "wayland"]
 categories = ["filesystem", "gui"]
 

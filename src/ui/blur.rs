@@ -14,7 +14,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for BlurBin {
-        const NAME: &'static str = "StrataBlurBin";
+        const NAME: &'static str = "BeeFileManagerBlurBin";
         type Type = super::BlurBin;
         type ParentType = gtk::Widget;
     }

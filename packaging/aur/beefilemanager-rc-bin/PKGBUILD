@@ -1,11 +1,11 @@
 # Maintainer: BeeFileManager maintainers <https://github.com/bartbeecoders/BeeFileManager/issues>
 # Generated from PKGBUILD.in; do not edit directly.
 
-pkgname=@PKGNAME@
-pkgver=@PKGVER@
-pkgrel=@PKGREL@
-_releasever=@RELEASEVER@
-pkgdesc="@PKGDESC@"
+pkgname=beefilemanager-rc-bin
+pkgver=0.9.0
+pkgrel=1
+_releasever=0.9.0
+pkgdesc="A fast, keyboard-first file manager for Linux (preview channel)"
 arch=('x86_64' 'aarch64')
 url="https://github.com/bartbeecoders/BeeFileManager"
 license=('GPL-3.0-or-later')
@@ -27,13 +27,13 @@ optdepends=(
   'libraw: RAW image previews when ImageMagick is unavailable'
 )
 provides=("beefilemanager=${pkgver}")
-conflicts=('beefilemanager' '@ALTERNATE@')
+conflicts=('beefilemanager' 'beefilemanager-bin')
 # Preserve byte identity with the attested release artifact.
 options=('!strip' '!debug')
 source_x86_64=("${url}/releases/download/v${_releasever}/beefilemanager-${_releasever}-x86_64-unknown-linux-gnu.tar.gz")
 source_aarch64=("${url}/releases/download/v${_releasever}/beefilemanager-${_releasever}-aarch64-unknown-linux-gnu.tar.gz")
-sha256sums_x86_64=('@SHA256_X86_64@')
-sha256sums_aarch64=('@SHA256_AARCH64@')
+sha256sums_x86_64=('708ff61000ae78790813c4e842ab6d7b49be6d85a728d22e1ff59cc34f54599d')
+sha256sums_aarch64=('361be021c83bdf8af503ac8c487f3e1e6b2900211dcaef237fd8c9b699277713')
 
 package() {
   local dist="${srcdir}/beefilemanager-${_releasever}-${CARCH}-unknown-linux-gnu"
@@ -59,9 +59,9 @@ package() {
 
   install -Dm644 /dev/stdin "${pkgdir}/usr/share/beefilemanager/install-source.toml" <<'MARKER'
 manager = "pacman"
-package = "@PKGNAME@"
-channel = "@CHANNEL@"
+package = "beefilemanager-rc-bin"
+channel = "rc"
 aur_helpers = ["yay", "paru", "pikaur", "trizen"]
-alternate_package = "@ALTERNATE@"
+alternate_package = "beefilemanager-bin"
 MARKER
 }

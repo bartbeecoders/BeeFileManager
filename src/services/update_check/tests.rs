@@ -115,7 +115,7 @@ fn malformed_tag_is_dropped() {
 fn non_matching_arch_asset_yields_no_download_url() {
     let response = release_response(
         r#"{"tag_name":"v0.5.0","draft":false,"prerelease":false,
-        "assets":[{"name":"strata-0.5.0-bogus-arch.tar.gz","browser_download_url":"https://example.invalid/x"}]}"#,
+        "assets":[{"name":"beefilemanager-0.5.0-bogus-arch.tar.gz","browser_download_url":"https://example.invalid/x"}]}"#,
     );
     let summary = to_release_summary(&response).expect("tag should parse");
     assert!(summary.download_url.is_none());
@@ -167,7 +167,7 @@ fn release_metadata_carries_channel_identity_fields() {
     assert!(metadata.commit.is_none());
     assert_eq!(
         metadata.url,
-        "https://github.com/lgse/strata/releases/tag/v0.5.0-rc.1"
+        "https://github.com/bartbeecoders/BeeFileManager/releases/tag/v0.5.0-rc.1"
     );
 }
 
@@ -223,7 +223,7 @@ fn other_api_failures_include_the_status() {
 fn release_page_url_uses_the_exact_published_tag() {
     assert_eq!(
         release_page_url("v1.2.3"),
-        "https://github.com/lgse/strata/releases/tag/v1.2.3"
+        "https://github.com/bartbeecoders/BeeFileManager/releases/tag/v1.2.3"
     );
 }
 
@@ -270,7 +270,7 @@ fn preview_feed_skips_drafts_unparsable_tags_and_assetless_releases() {
             {{"tag_name":"v0.7.0","draft":true,"prerelease":false,"assets":[{draft_asset}]}},
             {{"tag_name":"not-a-version","draft":false,"prerelease":false,"assets":[]}},
             {{"tag_name":"v0.6.0","draft":false,"prerelease":false,
-              "assets":[{{"name":"strata-0.6.0-bogus-arch.tar.gz","browser_download_url":"https://example.invalid/z"}}]}},
+              "assets":[{{"name":"beefilemanager-0.6.0-bogus-arch.tar.gz","browser_download_url":"https://example.invalid/z"}}]}},
             {{"tag_name":"v0.5.0","draft":false,"prerelease":false,"assets":[{valid_asset}]}}
         ]"#
     ));

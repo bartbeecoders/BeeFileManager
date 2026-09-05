@@ -68,7 +68,7 @@ fn svg_body_preserves_bundled_icon_geometry() {
 
 #[test]
 fn folder_emoji_renders_at_high_resolution() {
-    gio::resources_register_include!("strata.gresource").expect("resources register");
+    gio::resources_register_include!("beefilemanager.gresource").expect("resources register");
     let texture = folder_decoration_texture("emoji:🚀", "#e5484d").expect("emoji renders");
     assert_eq!(texture.width(), 96);
     assert_eq!(texture.height(), 96);
@@ -76,7 +76,7 @@ fn folder_emoji_renders_at_high_resolution() {
 
 #[test]
 fn primary_icons_rasterize_at_high_resolution() {
-    gio::resources_register_include!("strata.gresource").expect("resources register");
+    gio::resources_register_include!("beefilemanager.gresource").expect("resources register");
     let texture = primary_icon_texture(icons::DOCUMENTS, "#8bc9eb").expect("icon renders");
     assert_eq!(texture.width(), 96);
     assert_eq!(texture.height(), 96);

@@ -17,14 +17,14 @@ use crate::services::{InstallSource, ensure_self_managed};
 use super::release_channel::Version;
 
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(120);
-const DESKTOP_ENTRY: &str = "io.github.lgse.Strata.desktop";
-const APPLICATION_ICON: &str = "io.github.lgse.Strata.svg";
+const DESKTOP_ENTRY: &str = "io.github.bartbeecoders.BeeFileManager.desktop";
+const APPLICATION_ICON: &str = "io.github.bartbeecoders.BeeFileManager.svg";
 const AUR_RPC: &str = "https://aur.archlinux.org/rpc/v5/info";
 const AUR_RESPONSE_LIMIT: u64 = 1024 * 1024;
 const PACMAN: &str = "/usr/bin/pacman";
 const PACMAN_CONF: &str = "/usr/bin/pacman-conf";
 const OS_RELEASE: &str = "/etc/os-release";
-const PACKAGE_NAME: &str = "strata";
+const PACKAGE_NAME: &str = "beefilemanager";
 const REPOSITORY_DATABASE_LIMIT: u64 = 4 * 1024 * 1024;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -111,7 +111,7 @@ fn os_release_has_id(contents: &str, expected: &str) -> bool {
     })
 }
 
-/// Returns the Strata version currently offered by pacman's configured sync
+/// Returns the BeeFileManager version currently offered by pacman's configured sync
 /// databases. This is deliberately a local query: package-managed installs
 /// must not advertise a GitHub release until their package manager can
 /// actually install it.
@@ -200,7 +200,7 @@ fn parse_aur_package_version(value: &str) -> Option<Version> {
 
 /// Reads the live Omarchy repository database selected by this installation,
 /// rather than pacman's cached copy. The cache is normally refreshed by the
-/// same `omarchy update` that installs Strata, so consulting it would make the
+/// same `omarchy update` that installs BeeFileManager, so consulting it would make the
 /// notification arrive only after the update had already been installed.
 pub(super) fn omarchy_repository_version() -> Result<Version, String> {
     let server = omarchy_repository_server(Path::new(PACMAN_CONF))?;
@@ -270,7 +270,7 @@ fn repository_database_version(database: &[u8], package: &str) -> Result<Version
                 .ok_or_else(|| "Omarchy repository returned an invalid version".to_owned());
         }
     }
-    Err("Strata is not available in the Omarchy repository".to_owned())
+    Err("BeeFileManager is not available in the Omarchy repository".to_owned())
 }
 
 fn repository_description_field<'a>(description: &'a str, field: &str) -> Option<&'a str> {
@@ -328,7 +328,7 @@ fn parse_package_version(value: &str) -> Option<Version> {
 pub fn install_update(request: InstallRequest) -> Receiver<UpdateInstall> {
     let (sender, receiver) = mpsc::channel();
     let spawned = std::thread::Builder::new()
-        .name("strata-update-install".into())
+        .name("beefilemanager-update-install".into())
         .spawn(move || {
             let outcome = match perform_install(&request.download_url, &sender) {
                 Ok(()) => UpdateInstall::Installed,
@@ -367,7 +367,7 @@ fn perform_install(download_url: &str, progress: &Sender<UpdateInstall>) -> Resu
         .ok_or_else(|| "Could not determine the install directory".to_owned())?;
 
     // A unique-per-install directory, not the old process-scoped
-    // `.strata-update-{pid}`: with three independent install drivers (the
+    // `.beefilemanager-update-{pid}`: with three independent install drivers (the
     // update row, rollback, and the update dialog) that can all be reachable
     // at once on a preview build, a shared path was how two installs racing
     // over the same archive and staged binary corrupted each other. The
@@ -391,7 +391,7 @@ fn perform_install(download_url: &str, progress: &Sender<UpdateInstall>) -> Resu
 /// `exe_dir`. See `perform_install` for why uniqueness matters.
 fn stage_workdir(exe_dir: &Path) -> Result<tempfile::TempDir, String> {
     tempfile::Builder::new()
-        .prefix(".strata-update-")
+        .prefix(".beefilemanager-update-")
         .tempdir_in(exe_dir)
         .map_err(|error| format!("Could not stage the update: {error}"))
 }
@@ -400,7 +400,7 @@ fn stage_workdir(exe_dir: &Path) -> Result<tempfile::TempDir, String> {
 /// inside `exe_dir`, for the same reason as `stage_workdir`.
 fn stage_binary_path(exe_dir: &Path) -> Result<tempfile::NamedTempFile, String> {
     tempfile::Builder::new()
-        .prefix(".strata-update-")
+        .prefix(".beefilemanager-update-")
         .suffix(".tmp")
         .tempfile_in(exe_dir)
         .map_err(|error| format!("Could not stage the new binary: {error}"))
@@ -413,7 +413,7 @@ fn try_install(
     current_exe: &Path,
     progress: &Sender<UpdateInstall>,
 ) -> Result<(), String> {
-    let archive_path = workdir.join("strata.tar.gz");
+    let archive_path = workdir.join("beefilemanager.tar.gz");
     download_to_file(download_url, &archive_path, progress)?;
     let _sent = progress.send(UpdateInstall::Verifying);
     verify_checksum(download_url, &archive_path)?;
@@ -427,10 +427,10 @@ fn try_install(
         .arg("-C")
         .arg(&extract_dir))?;
 
-    let binary_paths = find_binaries(&extract_dir, &["strata"])?;
-    let binary_path = binary_paths
-        .first()
-        .ok_or_else(|| "Could not find the strata binary in the downloaded archive".to_owned())?;
+    let binary_paths = find_binaries(&extract_dir, &["beefilemanager"])?;
+    let binary_path = binary_paths.first().ok_or_else(|| {
+        "Could not find the beefilemanager binary in the downloaded archive".to_owned()
+    })?;
     let staged = stage_binary_path(exe_dir)?;
     fs::copy(binary_path, staged.path())
         .map_err(|error| format!("Could not stage the new binary: {error}"))?;
@@ -542,7 +542,7 @@ fn download_to_file(
     let agent: ureq::Agent = config.into();
     let mut response = agent
         .get(url)
-        .header("User-Agent", "strata-file-manager")
+        .header("User-Agent", "beefilemanager-file-manager")
         .call()
         .map_err(|error| format!("Could not download the update: {error}"))?;
     let total = response
@@ -579,7 +579,7 @@ fn verify_checksum(download_url: &str, archive_path: &Path) -> Result<(), String
     let checksum_url = format!("{download_url}.sha256");
     let expected = agent
         .get(&checksum_url)
-        .header("User-Agent", "strata-file-manager")
+        .header("User-Agent", "beefilemanager-file-manager")
         .call()
         .and_then(|mut response| response.body_mut().read_to_string())
         .map_err(|error| format!("Could not verify the update: {error}"))?;

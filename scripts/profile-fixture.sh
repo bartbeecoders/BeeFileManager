@@ -3,7 +3,7 @@ set -euo pipefail
 
 fixture="${1:?usage: $0 FIXTURE_DIRECTORY [TIMEOUT_SECONDS]}"
 timeout_seconds="${2:-15}"
-binary="${STRATA_BINARY:-target/debug/strata}"
+binary="${BEEFILEMANAGER_BINARY:-target/debug/beefilemanager}"
 
 if [[ ! -x "$binary" ]]; then
   echo "$binary does not exist; run cargo build first" >&2
@@ -11,7 +11,7 @@ if [[ ! -x "$binary" ]]; then
 fi
 
 fixture="$(realpath "$fixture")"
-log="$(mktemp --tmpdir strata-profile.XXXXXX.log)"
+log="$(mktemp --tmpdir beefilemanager-profile.XXXXXX.log)"
 peak_rss_kb=0
 peak_pss_kb=0
 
@@ -38,7 +38,7 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-env RUST_LOG=strata=debug "$binary" "$fixture" >"$log" 2>&1 &
+env RUST_LOG=beefilemanager=debug "$binary" "$fixture" >"$log" 2>&1 &
 pid=$!
 started=$SECONDS
 

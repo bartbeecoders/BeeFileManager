@@ -52,14 +52,14 @@ jobs:
       - name: Verify committed packages are generated
         run: |
           su builder -c '
-            stable=$(grep -m1 "^_releasever=" packaging/aur/strata-bin/PKGBUILD | cut -d= -f2)
-            preview=$(grep -m1 "^_releasever=" packaging/aur/strata-rc-bin/PKGBUILD | cut -d= -f2)
+            stable=$(grep -m1 "^_releasever=" packaging/aur/beefilemanager-bin/PKGBUILD | cut -d= -f2)
+            preview=$(grep -m1 "^_releasever=" packaging/aur/beefilemanager-rc-bin/PKGBUILD | cut -d= -f2)
             python3 scripts/update_aur.py --stable "$stable" --preview "$preview" --check
           '
 
       - name: Build the packages
         run: |
-          for package in strata-bin strata-rc-bin; do
+          for package in beefilemanager-bin beefilemanager-rc-bin; do
             echo "::group::makepkg $package"
             su builder -c "cd packaging/aur/$package && makepkg --cleanbuild --syncdeps --noconfirm"
             echo "::endgroup::"
@@ -69,7 +69,7 @@ jobs:
       - name: Check the packages with namcap
         run: |
           status=0
-          for package in strata-bin strata-rc-bin; do
+          for package in beefilemanager-bin beefilemanager-rc-bin; do
             echo "::group::namcap $package"
             report=$(su builder -c "cd packaging/aur/$package && namcap PKGBUILD ./*.pkg.tar.zst")
             printf '%s\n' "$report"
@@ -83,13 +83,13 @@ jobs:
 
       - name: Verify the installed paths and packaging marker
         run: |
-          set -- strata-bin stable strata-rc-bin rc
+          set -- beefilemanager-bin stable beefilemanager-rc-bin rc
           while (( $# )); do
             package=$1 channel=$2
             shift 2
             archive=$(echo packaging/aur/"$package"/*.pkg.tar.zst)
-            bsdtar -tf "$archive" | grep -qx 'usr/bin/strata'
-            marker=$(bsdtar -xOf "$archive" usr/share/strata/install-source.toml)
+            bsdtar -tf "$archive" | grep -qx 'usr/bin/beefilemanager'
+            marker=$(bsdtar -xOf "$archive" usr/share/beefilemanager/install-source.toml)
             printf '%s\n' "$marker" | grep -qx "package = \"$package\""
             printf '%s\n' "$marker" | grep -qx "channel = \"$channel\""
             if printf '%s\n' "$marker" | grep -q '^update_command'; then
@@ -100,9 +100,9 @@ jobs:
 
       - name: Confirm packaging does not modify the published binary
         run: |
-          archive=$(echo packaging/aur/strata-bin/*.pkg.tar.zst)
-          packaged=$(bsdtar -xOf "$archive" usr/bin/strata | sha256sum | cut -d' ' -f1)
-          upstream=$(tar -xOzf packaging/aur/strata-bin/strata-*.tar.gz --wildcards '*/strata' | sha256sum | cut -d' ' -f1)
+          archive=$(echo packaging/aur/beefilemanager-bin/*.pkg.tar.zst)
+          packaged=$(bsdtar -xOf "$archive" usr/bin/beefilemanager | sha256sum | cut -d' ' -f1)
+          upstream=$(tar -xOzf packaging/aur/beefilemanager-bin/beefilemanager-*.tar.gz --wildcards '*/beefilemanager' | sha256sum | cut -d' ' -f1)
           if [[ "$packaged" != "$upstream" ]]; then
             echo "The packaged binary differs from the published release artifact, which breaks provenance verification." >&2
             exit 1

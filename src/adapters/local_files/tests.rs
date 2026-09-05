@@ -120,7 +120,7 @@ fn validation_accepts_readable_directories_and_rejects_files_and_missing_paths()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let directory = std::env::temp_dir().join(format!("strata-location-test-{unique}"));
+    let directory = std::env::temp_dir().join(format!("beefilemanager-location-test-{unique}"));
     let file = directory.join("file.txt");
     let missing = directory.join("missing");
     fs::create_dir(&directory)?;
@@ -149,7 +149,7 @@ fn invalid_utf8_names_keep_their_native_bytes() -> Result<(), Box<dyn Error>> {
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let directory = std::env::temp_dir().join(format!("strata-native-name-test-{unique}"));
+    let directory = std::env::temp_dir().join(format!("beefilemanager-native-name-test-{unique}"));
     fs::create_dir(&directory)?;
     let native_name = OsString::from_vec(b"invalid-\xff".to_vec());
     let path = directory.join(&native_name);
@@ -248,7 +248,7 @@ fn symlink_targets_and_broken_links_are_distinguished() -> Result<(), Box<dyn Er
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let directory = std::env::temp_dir().join(format!("strata-symlink-test-{unique}"));
+    let directory = std::env::temp_dir().join(format!("beefilemanager-symlink-test-{unique}"));
     fs::create_dir(&directory)?;
     fs::create_dir(directory.join("directory"))?;
     fs::write(directory.join("file"), b"fixture")?;
@@ -345,7 +345,7 @@ fn unique_fixture_root(label: &str) -> std::path::PathBuf {
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("the system clock should be after the Unix epoch")
         .as_nanos();
-    std::env::temp_dir().join(format!("strata-local-files-{label}-{unique}"))
+    std::env::temp_dir().join(format!("beefilemanager-local-files-{label}-{unique}"))
 }
 
 /// `enumerate()` spawns its work on `glib::MainContext::default()` internally (not whatever

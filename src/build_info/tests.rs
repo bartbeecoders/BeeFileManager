@@ -7,11 +7,14 @@ fn package_metadata_is_available_to_the_about_page() {
     assert!(!DESCRIPTION.is_empty());
     assert!(!VERSION.is_empty());
     assert!(!COMMIT.is_empty());
-    assert_eq!(REPOSITORY, "https://github.com/LGSE/strata");
-    assert_eq!(AUTHOR, "LGSE Ltd.");
+    assert_eq!(
+        REPOSITORY,
+        "https://github.com/bartbeecoders/BeeFileManager"
+    );
+    assert_eq!(AUTHOR, "bartbeecoders");
 }
 
-/// The default `RELEASE_TAG` injected by `build.rs` (no `STRATA_RELEASE_TAG`
+/// The default `RELEASE_TAG` injected by `build.rs` (no `BEEFILEMANAGER_RELEASE_TAG`
 /// override, i.e. every developer build and this test run) must be a
 /// well-formed tag the release-channel grammar accepts.
 #[test]
@@ -22,7 +25,7 @@ fn default_release_tag_parses_to_a_version() {
     );
 }
 
-/// A developer build has no `STRATA_BUILD_KIND` override, so it must
+/// A developer build has no `BEEFILEMANAGER_BUILD_KIND` override, so it must
 /// report itself as `Stable` -- the fallback that keeps a build unable to
 /// identify itself from silently claiming to be a preview.
 #[test]

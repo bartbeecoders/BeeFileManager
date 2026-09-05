@@ -1,4 +1,4 @@
-# Strata Work Breakdown
+# BeeFileManager Work Breakdown
 
 This is the project execution checklist. Work top-to-bottom within a milestone unless dependencies indicate otherwise.
 
@@ -172,7 +172,7 @@ Legend: **P0** blocks the milestone, **P1** is required for its exit criteria, *
 - [x] **P0** Paste a GDK file-list clipboard into the active folder with `Ctrl+V` or the folder background menu
 - [ ] **P0** Use interoperable file-manager clipboard formats for external copy/cut/paste
 - [ ] **P0** Enable Cut/Copy based on selection and Paste based on clipboard contents and destination writability
-- [x] **P0** Drag and drop files and folders between locations within Strata with negotiated copy/move actions
+- [x] **P0** Drag and drop files and folders between locations within BeeFileManager with negotiated copy/move actions
 - [x] **P0** Accept GDK file-list drops from external applications
 - [x] **P0** Export selected files as GTK/GDK file-list and `text/uri-list` drag data for browsers, editors, desktop targets, and other external applications
 - [ ] **P1** Test outbound file dragging across native Wayland applications, XWayland applications, and browser upload targets

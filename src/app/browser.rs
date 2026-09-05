@@ -232,7 +232,7 @@ struct UndoState {
     claimed: bool,
 }
 
-// Undo follows the latest operation across every Strata window on the GTK main thread.
+// Undo follows the latest operation across every BeeFileManager window on the GTK main thread.
 thread_local! {
     static PENDING_UNDO: RefCell<UndoState> = RefCell::new(UndoState::default());
 }

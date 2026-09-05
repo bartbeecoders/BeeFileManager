@@ -56,7 +56,7 @@ fn validate_destination(path: &Path) -> io::Result<()> {
 fn create_temporary_file(parent: &Path) -> io::Result<(PathBuf, File)> {
     loop {
         let path = parent.join(format!(
-            ".strata-write-{}-{}.tmp",
+            ".beefilemanager-write-{}-{}.tmp",
             std::process::id(),
             NEXT_TEMP_FILE.fetch_add(1, Ordering::Relaxed)
         ));

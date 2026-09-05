@@ -164,7 +164,7 @@ pub(crate) fn parse(
 
     let output = PrivateOutput::create().map_err(|error| error.to_string())?;
     let executable = std::env::current_exe()
-        .map_err(|error| format!("Unable to locate the Strata executable: {error}"))?;
+        .map_err(|error| format!("Unable to locate the BeeFileManager executable: {error}"))?;
     let devices = if operation == ParseOperation::PreviewMedia {
         gpu_devices(Path::new("/dev"), media_backend)
     } else {
@@ -425,7 +425,10 @@ fn sandbox_command(
     ]);
     let sandbox_input = sandbox_input_path(input);
     if operation != ParseOperation::ThumbnailVideo {
-        command.arg("--ro-bind").arg(executable).arg("/app/strata");
+        command
+            .arg("--ro-bind")
+            .arg(executable)
+            .arg("/app/beefilemanager");
     }
     command.arg("--ro-bind").arg(input).arg(&sandbox_input);
     if operation != ParseOperation::PreviewMedia {
@@ -468,7 +471,7 @@ fn sandbox_command(
         return command;
     }
     command.args([
-        "/app/strata",
+        "/app/beefilemanager",
         "--preview-helper",
         operation.argument(),
         &sandbox_input,
@@ -620,7 +623,7 @@ impl PrivateOutput {
         use std::os::unix::fs::DirBuilderExt;
 
         let path = std::env::temp_dir().join(format!(
-            "strata-preview-{}-{}",
+            "beefilemanager-preview-{}-{}",
             std::process::id(),
             NEXT_DIRECTORY.fetch_add(1, Ordering::Relaxed)
         ));

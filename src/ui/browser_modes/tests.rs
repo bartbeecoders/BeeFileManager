@@ -168,7 +168,7 @@ fn entries_of_one_type_share_a_group() {
     );
 }
 
-const GTK_CHILD: &str = "STRATA_SOURCE_INDEX_MAP_GTK_CHILD";
+const GTK_CHILD: &str = "BEEFILEMANAGER_SOURCE_INDEX_MAP_GTK_CHILD";
 const SOURCE_INDEX_TEST: &str =
     "ui::browser_modes::tests::source_index_map_tracks_filter_sort_and_placeholder";
 

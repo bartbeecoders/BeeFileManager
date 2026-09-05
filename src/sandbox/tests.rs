@@ -34,7 +34,7 @@ fn file_size_limit_holds_a_full_resolution_decoded_frame() {
     const RGBA_CHANNELS: u64 = 4;
 
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Pictures/photo.jpg"),
         Path::new("/tmp/private-output"),
         ParseOperation::ThumbnailImage,
@@ -66,7 +66,7 @@ fn png(width: u32, height: u32) -> Vec<u8> {
 #[test]
 fn sandbox_exposes_only_runtime_input_and_private_output() {
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Downloads/untrusted.pdf"),
         Path::new("/tmp/private-output"),
         ParseOperation::PreviewPdf,
@@ -100,7 +100,7 @@ fn sandbox_exposes_only_runtime_input_and_private_output() {
 fn media_previews_use_bounded_streaming_instead_of_driver_wide_resource_limits() {
     let operation = ParseOperation::PreviewMedia;
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         operation,
@@ -204,7 +204,7 @@ fn every_polaris_range_uses_the_safe_default_but_remains_available_for_opt_in() 
     assert_eq!(devices.len(), blocked.len());
     assert!(polaris_gpu_available_at(&dev, &drm));
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         ParseOperation::PreviewMedia,
@@ -283,7 +283,7 @@ fn media_sandbox_exposes_only_supplied_gpu_devices_and_sysfs() {
         "/dev/nvidiactl".into(),
     ];
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         ParseOperation::PreviewMedia,
@@ -310,7 +310,7 @@ fn media_sandbox_exposes_only_supplied_gpu_devices_and_sysfs() {
 #[test]
 fn software_media_sandbox_exposes_no_gpu_devices_or_sysfs() {
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         ParseOperation::PreviewMedia,
@@ -332,7 +332,7 @@ fn software_media_sandbox_exposes_no_gpu_devices_or_sysfs() {
 #[test]
 fn non_media_sandboxes_never_expose_gpu_devices_or_sysfs() {
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         ParseOperation::ThumbnailVideo,
@@ -354,7 +354,7 @@ fn non_media_sandboxes_never_expose_gpu_devices_or_sysfs() {
 #[test]
 fn video_thumbnails_execute_directly_inside_the_bounded_sandbox() {
     let command = sandbox_command(
-        Path::new("/tmp/strata"),
+        Path::new("/tmp/beefilemanager"),
         Path::new("/home/alice/Videos/untrusted.mkv"),
         Path::new("/tmp/private-output"),
         ParseOperation::ThumbnailVideo,
@@ -378,7 +378,7 @@ fn video_thumbnails_execute_directly_inside_the_bounded_sandbox() {
         joined
             .contains("/usr/bin/ffmpegthumbnailer -i /input.mkv -o /output/result.png -s 128 -q 8")
     );
-    assert!(!joined.contains("/app/strata"));
+    assert!(!joined.contains("/app/beefilemanager"));
     assert!(!joined.contains("--preview-helper"));
     assert!(!joined.contains("--share-net"));
 }

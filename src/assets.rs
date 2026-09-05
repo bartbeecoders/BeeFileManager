@@ -13,65 +13,65 @@ use std::{
 use gtk::{gdk, gdk::prelude::GdkCairoContextExt, gio, glib};
 
 pub mod icons {
-    pub const ARROW_DOWN: &str = "strata-arrow-down";
-    pub const ARROW_DOWN_WIDE_NARROW: &str = "strata-arrow-down-wide-narrow";
-    pub const ARROW_LEFT: &str = "strata-arrow-left";
-    pub const ARROW_RIGHT: &str = "strata-arrow-right";
-    pub const ARROW_UP: &str = "strata-arrow-up";
-    pub const ARROW_UP_NARROW_WIDE: &str = "strata-arrow-up-narrow-wide";
-    pub const CHECK: &str = "strata-check";
-    pub const CHECK_ON_PRIMARY: &str = "strata-check-on-primary";
-    pub const CHEVRON_RIGHT: &str = "strata-chevron-right";
-    pub const CLIPBOARD_PASTE: &str = "strata-clipboard-paste";
-    pub const COPY: &str = "strata-copy";
-    pub const CORNER_DOWN_LEFT: &str = "strata-corner-down-left";
-    pub const DOCUMENTS: &str = "strata-file-text";
-    pub const DOWNLOADS: &str = "strata-download";
-    pub const EJECT: &str = "strata-eject";
-    pub const EYE: &str = "strata-eye";
-    pub const EYE_OFF: &str = "strata-eye-off";
-    pub const EXTERNAL_LINK: &str = "strata-external-link";
-    pub const FILE_ARCHIVE: &str = "strata-file-archive";
-    pub const FILE_CODE: &str = "strata-file-code";
-    pub const FILE_PLUS: &str = "strata-file-plus";
-    pub const FOLDER: &str = "strata-folder";
-    pub const FOLDER_PLUS: &str = "strata-folder-plus";
-    pub const HARD_DRIVE: &str = "strata-hard-drive";
-    pub const INFO: &str = "strata-info";
-    pub const FUNNEL: &str = "strata-funnel";
-    pub const GRID: &str = "strata-grid";
-    pub const HOME: &str = "strata-house";
-    pub const LIST: &str = "strata-list";
-    pub const LIST_ACTIVE: &str = "strata-list-active";
-    pub const LIST_CHECKS: &str = "strata-list-checks";
-    pub const KEY: &str = "strata-key";
-    pub const KEYBOARD: &str = "strata-keyboard";
-    pub const MONITOR: &str = "strata-monitor";
-    pub const NETWORK: &str = "strata-network";
-    pub const PALETTE: &str = "strata-palette";
-    pub const PANEL_LEFT: &str = "strata-panel-left-symbolic";
-    pub const PAUSE: &str = "strata-pause";
-    pub const PENCIL: &str = "strata-pencil";
-    pub const PIN: &str = "strata-pin";
-    pub const PLAY: &str = "strata-play";
-    pub const PLUS: &str = "strata-plus";
-    pub const PRINTER: &str = "strata-printer";
-    pub const PICTURES: &str = "strata-image";
-    pub const ROWS: &str = "strata-rows";
-    pub const SCISSORS: &str = "strata-scissors";
-    pub const SEARCH: &str = "strata-search";
-    pub const SETTINGS: &str = "strata-settings";
-    pub const SETTINGS_2: &str = "strata-settings-2";
-    pub const REFRESH: &str = "strata-refresh";
-    pub const SLIDERS: &str = "strata-sliders-horizontal";
-    pub const TERMINAL: &str = "strata-terminal";
-    pub const TRASH: &str = "strata-trash";
-    pub const TRIANGLE_ALERT: &str = "strata-triangle-alert";
-    pub const UNPLUG: &str = "strata-unplug";
-    pub const VIDEOS: &str = "strata-video";
-    pub const VOLUME_2: &str = "strata-volume-2";
-    pub const VOLUME_X: &str = "strata-volume-x";
-    pub const X: &str = "strata-x";
+    pub const ARROW_DOWN: &str = "beefilemanager-arrow-down";
+    pub const ARROW_DOWN_WIDE_NARROW: &str = "beefilemanager-arrow-down-wide-narrow";
+    pub const ARROW_LEFT: &str = "beefilemanager-arrow-left";
+    pub const ARROW_RIGHT: &str = "beefilemanager-arrow-right";
+    pub const ARROW_UP: &str = "beefilemanager-arrow-up";
+    pub const ARROW_UP_NARROW_WIDE: &str = "beefilemanager-arrow-up-narrow-wide";
+    pub const CHECK: &str = "beefilemanager-check";
+    pub const CHECK_ON_PRIMARY: &str = "beefilemanager-check-on-primary";
+    pub const CHEVRON_RIGHT: &str = "beefilemanager-chevron-right";
+    pub const CLIPBOARD_PASTE: &str = "beefilemanager-clipboard-paste";
+    pub const COPY: &str = "beefilemanager-copy";
+    pub const CORNER_DOWN_LEFT: &str = "beefilemanager-corner-down-left";
+    pub const DOCUMENTS: &str = "beefilemanager-file-text";
+    pub const DOWNLOADS: &str = "beefilemanager-download";
+    pub const EJECT: &str = "beefilemanager-eject";
+    pub const EYE: &str = "beefilemanager-eye";
+    pub const EYE_OFF: &str = "beefilemanager-eye-off";
+    pub const EXTERNAL_LINK: &str = "beefilemanager-external-link";
+    pub const FILE_ARCHIVE: &str = "beefilemanager-file-archive";
+    pub const FILE_CODE: &str = "beefilemanager-file-code";
+    pub const FILE_PLUS: &str = "beefilemanager-file-plus";
+    pub const FOLDER: &str = "beefilemanager-folder";
+    pub const FOLDER_PLUS: &str = "beefilemanager-folder-plus";
+    pub const HARD_DRIVE: &str = "beefilemanager-hard-drive";
+    pub const INFO: &str = "beefilemanager-info";
+    pub const FUNNEL: &str = "beefilemanager-funnel";
+    pub const GRID: &str = "beefilemanager-grid";
+    pub const HOME: &str = "beefilemanager-house";
+    pub const LIST: &str = "beefilemanager-list";
+    pub const LIST_ACTIVE: &str = "beefilemanager-list-active";
+    pub const LIST_CHECKS: &str = "beefilemanager-list-checks";
+    pub const KEY: &str = "beefilemanager-key";
+    pub const KEYBOARD: &str = "beefilemanager-keyboard";
+    pub const MONITOR: &str = "beefilemanager-monitor";
+    pub const NETWORK: &str = "beefilemanager-network";
+    pub const PALETTE: &str = "beefilemanager-palette";
+    pub const PANEL_LEFT: &str = "beefilemanager-panel-left-symbolic";
+    pub const PAUSE: &str = "beefilemanager-pause";
+    pub const PENCIL: &str = "beefilemanager-pencil";
+    pub const PIN: &str = "beefilemanager-pin";
+    pub const PLAY: &str = "beefilemanager-play";
+    pub const PLUS: &str = "beefilemanager-plus";
+    pub const PRINTER: &str = "beefilemanager-printer";
+    pub const PICTURES: &str = "beefilemanager-image";
+    pub const ROWS: &str = "beefilemanager-rows";
+    pub const SCISSORS: &str = "beefilemanager-scissors";
+    pub const SEARCH: &str = "beefilemanager-search";
+    pub const SETTINGS: &str = "beefilemanager-settings";
+    pub const SETTINGS_2: &str = "beefilemanager-settings-2";
+    pub const REFRESH: &str = "beefilemanager-refresh";
+    pub const SLIDERS: &str = "beefilemanager-sliders-horizontal";
+    pub const TERMINAL: &str = "beefilemanager-terminal";
+    pub const TRASH: &str = "beefilemanager-trash";
+    pub const TRIANGLE_ALERT: &str = "beefilemanager-triangle-alert";
+    pub const UNPLUG: &str = "beefilemanager-unplug";
+    pub const VIDEOS: &str = "beefilemanager-video";
+    pub const VOLUME_2: &str = "beefilemanager-volume-2";
+    pub const VOLUME_X: &str = "beefilemanager-volume-x";
+    pub const X: &str = "beefilemanager-x";
 
     pub const CUSTOMIZATION_CHOICES: [(&str, &str); 16] = [
         (DOCUMENTS, "Documents"),
@@ -125,10 +125,10 @@ thread_local! {
 }
 
 pub fn prepare() -> Result<(), Box<dyn std::error::Error>> {
-    gio::resources_register_include!("strata.gresource")?;
+    gio::resources_register_include!("beefilemanager.gresource")?;
 
     let font_directory = glib::user_cache_dir()
-        .join("strata")
+        .join("beefilemanager")
         .join("fonts")
         .join(FONT_VERSION);
     fs::create_dir_all(&font_directory)?;
@@ -142,7 +142,8 @@ pub fn prepare() -> Result<(), Box<dyn std::error::Error>> {
 
 pub fn register_icon_theme() {
     if let Some(display) = gdk::Display::default() {
-        gtk::IconTheme::for_display(&display).add_resource_path("/io/github/lgse/Strata/icons");
+        gtk::IconTheme::for_display(&display)
+            .add_resource_path("/io/github/bartbeecoders/BeeFileManager/icons");
     }
     // Desktop shells resolve the window icon by matching the application ID to a
     // desktop entry, but GTK also needs the name to expose the bundled icon on its
@@ -268,7 +269,7 @@ fn apply_primary_icon(image: &gtk::Image, name: &str, color: &str) {
 }
 
 fn primary_icon_texture(name: &str, color: &str) -> Option<gdk::Texture> {
-    let path = format!("/io/github/lgse/Strata/icons/scalable/actions/{name}.svg");
+    let path = format!("/io/github/bartbeecoders/BeeFileManager/icons/scalable/actions/{name}.svg");
     let data = gio::resources_lookup_data(&path, gio::ResourceLookupFlags::NONE).ok()?;
     let source = std::str::from_utf8(data.as_ref()).ok()?;
     let mut source = recolor_icon_source(source, color);
@@ -284,7 +285,7 @@ fn primary_icon_texture(name: &str, color: &str) -> Option<gdk::Texture> {
 
 fn folder_decoration_texture(decoration: &str, color: &str) -> Option<gdk::Texture> {
     let folder_data = gio::resources_lookup_data(
-        "/io/github/lgse/Strata/icons/scalable/actions/strata-folder.svg",
+        "/io/github/bartbeecoders/BeeFileManager/icons/scalable/actions/beefilemanager-folder.svg",
         gio::ResourceLookupFlags::NONE,
     )
     .ok()?;
@@ -299,7 +300,8 @@ fn folder_decoration_texture(decoration: &str, color: &str) -> Option<gdk::Textu
     }
 
     let foreground = contrasting_foreground(color);
-    let path = format!("/io/github/lgse/Strata/icons/scalable/actions/{decoration}.svg");
+    let path =
+        format!("/io/github/bartbeecoders/BeeFileManager/icons/scalable/actions/{decoration}.svg");
     let data = gio::resources_lookup_data(&path, gio::ResourceLookupFlags::NONE).ok()?;
     let badge = std::str::from_utf8(data.as_ref()).ok()?;
     let body = svg_body(badge)?;

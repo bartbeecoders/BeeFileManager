@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render Strata's AUR packages from `packaging/aur/PKGBUILD.in`."""
+"""Render BeeFileManager's AUR packages from `packaging/aur/PKGBUILD.in`."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import sys
 import urllib.error
 import urllib.request
 
-REPOSITORY_URL = "https://github.com/lgse/strata"
+REPOSITORY_URL = "https://github.com/bartbeecoders/BeeFileManager"
 TARGETS = ("x86_64", "aarch64")
 
 RELEASE_VERSION_PATTERN = re.compile(
@@ -19,14 +19,14 @@ RELEASE_VERSION_PATTERN = re.compile(
 )
 
 PACKAGES = {
-    "strata-bin": {
+    "beefilemanager-bin": {
         "channel": "stable",
-        "alternate": "strata-rc-bin",
+        "alternate": "beefilemanager-rc-bin",
         "description": "A fast, keyboard-first file manager for Linux",
     },
-    "strata-rc-bin": {
+    "beefilemanager-rc-bin": {
         "channel": "rc",
-        "alternate": "strata-bin",
+        "alternate": "beefilemanager-bin",
         "description": "A fast, keyboard-first file manager for Linux (preview channel)",
     },
 }
@@ -72,7 +72,7 @@ def preview_release_version(version: str) -> str:
 
 
 def archive_name(version: str, target: str) -> str:
-    return f"strata-{version}-{target}-unknown-linux-gnu.tar.gz"
+    return f"beefilemanager-{version}-{target}-unknown-linux-gnu.tar.gz"
 
 
 def checksum_url(version: str, target: str) -> str:
@@ -222,7 +222,7 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.stable is not None:
             update_package(
                 root,
-                "strata-bin",
+                "beefilemanager-bin",
                 stable_release_version(arguments.stable),
                 arguments.pkgrel,
                 arguments.skip_srcinfo,
@@ -231,7 +231,7 @@ def main(argv: list[str] | None = None) -> int:
         if arguments.preview is not None:
             update_package(
                 root,
-                "strata-rc-bin",
+                "beefilemanager-rc-bin",
                 preview_release_version(arguments.preview),
                 arguments.pkgrel,
                 arguments.skip_srcinfo,

@@ -12,12 +12,11 @@ use super::{
     repository_database_version, stage_binary_path, stage_workdir, update_method_for,
 };
 
-const PACKAGED_ENTRY: &str =
-    "[Desktop Entry]\nType=Application\nName=Strata\nExec=strata %U\nIcon=io.github.lgse.Strata\n";
+const PACKAGED_ENTRY: &str = "[Desktop Entry]\nType=Application\nName=BeeFileManager\nExec=beefilemanager %U\nIcon=io.github.bartbeecoders.BeeFileManager\n";
 
 fn scratch_dir(label: &str, line: u32) -> PathBuf {
     let dir = std::env::temp_dir().join(format!(
-        "strata-update-install-test-{label}-{}-{line}",
+        "beefilemanager-update-install-test-{label}-{}-{line}",
         std::process::id()
     ));
     let _removed = fs::remove_dir_all(&dir);
@@ -81,40 +80,40 @@ fn aur_response_selects_the_named_package() {
         "resultcount": 2,
         "results": [
             {"Name": "another-package", "Version": "9.0.0-1"},
-            {"Name": "strata-rc-bin", "Version": "0.10.0rc.2-1"}
+            {"Name": "beefilemanager-rc-bin", "Version": "0.10.0rc.2-1"}
         ]
     }"#;
 
     assert_eq!(
-        aur_repository_version_from_response(response, "strata-rc-bin")
+        aur_repository_version_from_response(response, "beefilemanager-rc-bin")
             .map(|version| version.to_string()),
         Ok("0.10.0-rc.2".to_owned())
     );
-    assert!(aur_repository_version_from_response(response, "strata-bin").is_err());
+    assert!(aur_repository_version_from_response(response, "beefilemanager-bin").is_err());
 }
 
 #[test]
-fn repository_probe_selects_strata_instead_of_a_dependency() {
+fn repository_probe_selects_beefilemanager_instead_of_a_dependency() {
     use std::os::unix::fs::PermissionsExt;
 
     let dir = tempfile::tempdir().expect("create tempdir");
     let probe = dir.path().join("pacman");
     fs::write(
         &probe,
-        "#!/bin/sh\nprintf '%s\\n' 'dependency 9.8.7-1' 'strata 0.8.1-1'\n",
+        "#!/bin/sh\nprintf '%s\\n' 'dependency 9.8.7-1' 'beefilemanager 0.8.1-1'\n",
     )
     .expect("write probe");
     fs::set_permissions(&probe, fs::Permissions::from_mode(0o755)).expect("make probe executable");
 
     assert_eq!(
-        package_repository_version_for(&probe, "strata").map(|version| version.to_string()),
+        package_repository_version_for(&probe, "beefilemanager").map(|version| version.to_string()),
         Ok("0.8.1".to_owned())
     );
 }
 
 #[test]
-fn omarchy_database_reports_the_packaged_strata_version() {
-    let description = b"%NAME%\nstrata\n\n%VERSION%\n0.8.1-2\n";
+fn omarchy_database_reports_the_packaged_beefilemanager_version() {
+    let description = b"%NAME%\nbeefilemanager\n\n%VERSION%\n0.8.1-2\n";
     let mut archive = Vec::new();
     {
         let mut builder = tar::Builder::new(&mut archive);
@@ -123,14 +122,14 @@ fn omarchy_database_reports_the_packaged_strata_version() {
         header.set_mode(0o644);
         header.set_cksum();
         builder
-            .append_data(&mut header, "strata-0.8.1-2/desc", &description[..])
+            .append_data(&mut header, "beefilemanager-0.8.1-2/desc", &description[..])
             .expect("append package description");
         builder.finish().expect("finish repository archive");
     }
     let database = zstd::stream::encode_all(&archive[..], 0).expect("compress repository database");
 
     assert_eq!(
-        repository_database_version(&database, "strata").map(|version| version.to_string()),
+        repository_database_version(&database, "beefilemanager").map(|version| version.to_string()),
         Ok("0.8.1".to_owned())
     );
 }
@@ -144,7 +143,7 @@ fn omarchy_package_ownership_defers_updates_to_omarchy() {
         .expect("write os-release");
 
     assert_eq!(
-        update_method_for(Path::new("/usr/bin/strata"), &probe, &os_release),
+        update_method_for(Path::new("/usr/bin/beefilemanager"), &probe, &os_release),
         UpdateMethod::Omarchy
     );
 }
@@ -156,7 +155,11 @@ fn ownership_probe_errors_disable_in_place_updates() {
     fs::write(&os_release, "ID=omarchy\n").expect("write os-release");
 
     assert_eq!(
-        update_method_for(Path::new("/usr/bin/strata"), dir.path(), &os_release),
+        update_method_for(
+            Path::new("/usr/bin/beefilemanager"),
+            dir.path(),
+            &os_release
+        ),
         UpdateMethod::Omarchy
     );
 }
@@ -169,7 +172,7 @@ fn non_omarchy_pacman_ownership_defers_updates_to_pacman() {
     fs::write(&os_release, "ID=arch\n").expect("write os-release");
 
     assert_eq!(
-        update_method_for(Path::new("/usr/bin/strata"), &probe, &os_release),
+        update_method_for(Path::new("/usr/bin/beefilemanager"), &probe, &os_release),
         UpdateMethod::Pacman
     );
 }
@@ -181,7 +184,7 @@ fn unowned_release_binary_keeps_in_place_updates() {
 
     assert_eq!(
         update_method_for(
-            Path::new("/home/user/.local/bin/strata"),
+            Path::new("/home/user/.local/bin/beefilemanager"),
             &probe,
             &dir.path().join("missing-os-release"),
         ),
@@ -218,7 +221,7 @@ fn stage_binary_path_is_unique_per_call() {
 #[test]
 fn first_hash_token_lowercases_and_ignores_trailing_filename() {
     assert_eq!(
-        first_hash_token("ABCDEF  strata-0.2.0-x86_64-unknown-linux-gnu.tar.gz\n"),
+        first_hash_token("ABCDEF  beefilemanager-0.2.0-x86_64-unknown-linux-gnu.tar.gz\n"),
         Some("abcdef".to_owned())
     );
 }
@@ -231,16 +234,16 @@ fn first_hash_token_rejects_empty_input() {
 #[test]
 fn find_binaries_locates_a_single_nested_binary() {
     let dir = std::env::temp_dir().join(format!(
-        "strata-update-install-test-{}-{}",
+        "beefilemanager-update-install-test-{}-{}",
         std::process::id(),
         line!()
     ));
-    let package_dir = dir.join("strata-0.2.0-x86_64-unknown-linux-gnu");
+    let package_dir = dir.join("beefilemanager-0.2.0-x86_64-unknown-linux-gnu");
     fs::create_dir_all(&package_dir).expect("create package dir");
-    fs::write(package_dir.join("strata"), b"binary").expect("write binary");
+    fs::write(package_dir.join("beefilemanager"), b"binary").expect("write binary");
 
-    let found = find_binaries(&dir, &["strata"]).expect("binary should be found");
-    assert_eq!(found, vec![package_dir.join("strata")]);
+    let found = find_binaries(&dir, &["beefilemanager"]).expect("binary should be found");
+    assert_eq!(found, vec![package_dir.join("beefilemanager")]);
 
     fs::remove_dir_all(&dir).expect("cleanup");
 }
@@ -248,13 +251,13 @@ fn find_binaries_locates_a_single_nested_binary() {
 #[test]
 fn find_binaries_errors_when_a_requested_name_is_missing() {
     let dir = std::env::temp_dir().join(format!(
-        "strata-update-install-test-empty-{}-{}",
+        "beefilemanager-update-install-test-empty-{}-{}",
         std::process::id(),
         line!()
     ));
     fs::create_dir_all(&dir).expect("create empty dir");
 
-    assert!(find_binaries(&dir, &["strata"]).is_err());
+    assert!(find_binaries(&dir, &["beefilemanager"]).is_err());
 
     fs::remove_dir_all(&dir).expect("cleanup");
 }
@@ -262,22 +265,22 @@ fn find_binaries_errors_when_a_requested_name_is_missing() {
 #[test]
 fn find_binaries_returns_all_requested_names_when_several_are_present() {
     let dir = std::env::temp_dir().join(format!(
-        "strata-update-install-test-multi-{}-{}",
+        "beefilemanager-update-install-test-multi-{}-{}",
         std::process::id(),
         line!()
     ));
-    let package_dir = dir.join("strata-0.2.0-x86_64-unknown-linux-gnu");
+    let package_dir = dir.join("beefilemanager-0.2.0-x86_64-unknown-linux-gnu");
     fs::create_dir_all(&package_dir).expect("create package dir");
-    fs::write(package_dir.join("strata"), b"binary").expect("write strata binary");
-    fs::write(package_dir.join("strata-helper"), b"binary").expect("write helper binary");
+    fs::write(package_dir.join("beefilemanager"), b"binary").expect("write beefilemanager binary");
+    fs::write(package_dir.join("beefilemanager-helper"), b"binary").expect("write helper binary");
 
-    let found =
-        find_binaries(&dir, &["strata", "strata-helper"]).expect("both binaries should be found");
+    let found = find_binaries(&dir, &["beefilemanager", "beefilemanager-helper"])
+        .expect("both binaries should be found");
     assert_eq!(
         found,
         vec![
-            package_dir.join("strata"),
-            package_dir.join("strata-helper"),
+            package_dir.join("beefilemanager"),
+            package_dir.join("beefilemanager-helper"),
         ]
     );
 
@@ -286,50 +289,53 @@ fn find_binaries_returns_all_requested_names_when_several_are_present() {
 
 #[test]
 fn desktop_entry_exec_points_at_the_install_path_and_keeps_field_codes() {
-    let entry = desktop_entry_with_exec(PACKAGED_ENTRY, Path::new("/home/user/.local/bin/strata"));
+    let entry = desktop_entry_with_exec(
+        PACKAGED_ENTRY,
+        Path::new("/home/user/.local/bin/beefilemanager"),
+    );
 
-    assert!(entry.contains("Exec=/home/user/.local/bin/strata %U\n"));
+    assert!(entry.contains("Exec=/home/user/.local/bin/beefilemanager %U\n"));
     assert!(entry.starts_with("[Desktop Entry]\n"));
-    assert!(entry.contains("Icon=io.github.lgse.Strata\n"));
+    assert!(entry.contains("Icon=io.github.bartbeecoders.BeeFileManager\n"));
 }
 
 #[test]
 fn desktop_entry_exec_quotes_paths_containing_spaces() {
-    let entry = desktop_entry_with_exec(PACKAGED_ENTRY, Path::new("/opt/my apps/strata"));
+    let entry = desktop_entry_with_exec(PACKAGED_ENTRY, Path::new("/opt/my apps/beefilemanager"));
 
-    assert!(entry.contains("Exec=\"/opt/my apps/strata\" %U\n"));
+    assert!(entry.contains("Exec=\"/opt/my apps/beefilemanager\" %U\n"));
 }
 
 #[test]
 fn desktop_entry_without_field_codes_keeps_a_bare_exec() {
     let entry = desktop_entry_with_exec(
-        "[Desktop Entry]\nExec=strata\n",
-        Path::new("/usr/bin/strata"),
+        "[Desktop Entry]\nExec=beefilemanager\n",
+        Path::new("/usr/bin/beefilemanager"),
     );
 
-    assert_eq!(entry, "[Desktop Entry]\nExec=/usr/bin/strata\n");
+    assert_eq!(entry, "[Desktop Entry]\nExec=/usr/bin/beefilemanager\n");
 }
 
 #[test]
 fn refresh_rewrites_an_installed_entry_and_icon() {
     let dir = scratch_dir("refresh", line!());
-    let package_dir = dir.join("strata-0.7.0-x86_64-unknown-linux-gnu");
+    let package_dir = dir.join("beefilemanager-0.7.0-x86_64-unknown-linux-gnu");
     packaged_metadata(&package_dir);
     let data_home = dir.join("share");
     let applications = data_home.join("applications");
     fs::create_dir_all(&applications).expect("create applications dir");
     fs::write(
         applications.join(DESKTOP_ENTRY),
-        "[Desktop Entry]\nExec=strata %U\nIcon=system-file-manager\n",
+        "[Desktop Entry]\nExec=beefilemanager %U\nIcon=system-file-manager\n",
     )
     .expect("write stale entry");
-    let executable = dir.join("bin/strata");
+    let executable = dir.join("bin/beefilemanager");
 
     refresh_desktop_metadata(&package_dir, &executable, &data_home);
 
     let entry = fs::read_to_string(applications.join(DESKTOP_ENTRY)).expect("read entry");
     assert!(entry.contains(&format!("Exec={} %U\n", executable.display())));
-    assert!(entry.contains("Icon=io.github.lgse.Strata\n"));
+    assert!(entry.contains("Icon=io.github.bartbeecoders.BeeFileManager\n"));
     assert_eq!(
         fs::read(installed_icon(&data_home)).expect("read icon"),
         b"<svg/>"
@@ -341,11 +347,11 @@ fn refresh_rewrites_an_installed_entry_and_icon() {
 #[test]
 fn refresh_does_not_create_metadata_the_user_never_installed() {
     let dir = scratch_dir("no-entry", line!());
-    let package_dir = dir.join("strata-0.7.0-x86_64-unknown-linux-gnu");
+    let package_dir = dir.join("beefilemanager-0.7.0-x86_64-unknown-linux-gnu");
     packaged_metadata(&package_dir);
     let data_home = dir.join("share");
 
-    refresh_desktop_metadata(&package_dir, &dir.join("bin/strata"), &data_home);
+    refresh_desktop_metadata(&package_dir, &dir.join("bin/beefilemanager"), &data_home);
 
     assert!(!data_home.join("applications").join(DESKTOP_ENTRY).exists());
     assert!(!installed_icon(&data_home).exists());
@@ -356,15 +362,15 @@ fn refresh_does_not_create_metadata_the_user_never_installed() {
 #[test]
 fn refresh_keeps_an_installed_entry_when_the_archive_omits_metadata() {
     let dir = scratch_dir("legacy-archive", line!());
-    let package_dir = dir.join("strata-0.7.0-x86_64-unknown-linux-gnu");
+    let package_dir = dir.join("beefilemanager-0.7.0-x86_64-unknown-linux-gnu");
     fs::create_dir_all(&package_dir).expect("create package dir");
     let data_home = dir.join("share");
     let applications = data_home.join("applications");
     fs::create_dir_all(&applications).expect("create applications dir");
-    let existing = "[Desktop Entry]\nExec=strata %U\n";
+    let existing = "[Desktop Entry]\nExec=beefilemanager %U\n";
     fs::write(applications.join(DESKTOP_ENTRY), existing).expect("write entry");
 
-    refresh_desktop_metadata(&package_dir, &dir.join("bin/strata"), &data_home);
+    refresh_desktop_metadata(&package_dir, &dir.join("bin/beefilemanager"), &data_home);
 
     assert_eq!(
         fs::read_to_string(applications.join(DESKTOP_ENTRY)).expect("read entry"),

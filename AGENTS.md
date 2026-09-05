@@ -16,7 +16,7 @@
 
 - Automated agents must follow the same issue-first workflow and pull request template as human contributors; do not remove or bypass template sections.
 - Use the bug report form for defects, the feature request form for enhancements, and a blank issue only when neither form fits.
-- Bug reports must include the Strata version, installation method, environment, reproduction steps, expected behavior, and any available sanitized logs. Never ask reporters to upload a core dump because it may contain secrets or private document contents.
+- Bug reports must include the BeeFileManager version, installation method, environment, reproduction steps, expected behavior, and any available sanitized logs. Never ask reporters to upload a core dump because it may contain secrets or private document contents.
 - Keep pull request descriptions concise: explain what changed and why, provide manual steps to exercise the feature or reproduce the fixed bug, state the expected result, and link the issue. Do not list automated checks that CI already runs.
 - Attach before/after screenshots or a short video for user-visible changes. Write `N/A` with a brief reason for non-visual changes.
 - Pull request titles must pass `.github/workflows/pr-title.yml`; do not bypass or weaken the Conventional Commit title check.
@@ -35,7 +35,7 @@
 ## Icons
 
 - Add new interface icons only from the Lucide icon set.
-- Keep Lucide geometry intact, namespace bundled assets with `strata-`, and preserve the ISC attribution in `THIRD_PARTY_LICENSES.md`.
+- Keep Lucide geometry intact, namespace bundled assets with `beefilemanager-`, and preserve the ISC attribution in `THIRD_PARTY_LICENSES.md`.
 - Render theme-colored bundled icons through `assets::primary_icon` / `assets::set_primary_icon`; direct icon-theme loading preserves the SVG's fallback color and will not follow live theme changes.
 
 ## Theming

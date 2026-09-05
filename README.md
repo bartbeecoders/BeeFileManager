@@ -1,26 +1,26 @@
 <div align="center">
 
-<img src="docs/assets/logos/strata-tokyo-night.svg" alt="Strata logo" width="160">
+<img src="docs/assets/logos/beefilemanager-tokyo-night.svg" alt="BeeFileManager logo" width="160">
 
-# Strata
+# BeeFileManager
 
 **Navigate every layer.** A fast, keyboard-first file manager for modern Linux desktops.
 
-[![CI](https://github.com/lgse/strata/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/lgse/strata/actions/workflows/ci.yml)
-[![Latest release](https://img.shields.io/github/v/release/lgse/strata?display_name=tag&sort=semver)](https://github.com/lgse/strata/releases/latest)
-[![License: GPL-3.0-or-later](https://img.shields.io/github/license/lgse/strata)](LICENSE)
+[![CI](https://github.com/bartbeecoders/BeeFileManager/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bartbeecoders/BeeFileManager/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/bartbeecoders/BeeFileManager?display_name=tag&sort=semver)](https://github.com/bartbeecoders/BeeFileManager/releases/latest)
+[![License: GPL-3.0-or-later](https://img.shields.io/github/license/bartbeecoders/BeeFileManager)](LICENSE)
 [![Linux](https://img.shields.io/badge/platform-Linux-FCC624?logo=linux&logoColor=black)](#technical-specifications)
 
 <picture>
-  <source media="(prefers-reduced-motion: no-preference)" srcset="docs/assets/strata-demo.gif">
-  <img src="docs/assets/strata-columns.png" alt="Strata browsing files and showing settings, themes, Icons view, and folder creation" width="1280">
+  <source media="(prefers-reduced-motion: no-preference)" srcset="docs/assets/beefilemanager-demo.gif">
+  <img src="docs/assets/beefilemanager-columns.png" alt="BeeFileManager browsing files and showing settings, themes, Icons view, and folder creation" width="1280">
 </picture>
 
-<sub>The animation respects reduced-motion preferences. View the [static preview](docs/assets/strata-columns.png).</sub>
+<sub>The animation respects reduced-motion preferences. View the [static preview](docs/assets/beefilemanager-columns.png).</sub>
 
 </div>
 
-Strata combines spatial Miller-column navigation with familiar Grid and Explorer views, instant fuzzy filename search, rich previews, and native Linux desktop integration. It is designed for Omarchy and works on compatible GTK4 Linux environments.
+BeeFileManager combines spatial Miller-column navigation with familiar Grid and Explorer views, instant fuzzy filename search, rich previews, and native Linux desktop integration. It is designed for Omarchy and works on compatible GTK4 Linux environments.
 
 ## Contents
 
@@ -31,7 +31,7 @@ Strata combines spatial Miller-column navigation with familiar Grid and Explorer
   - [Manual installation](#manual-installation)
 - [Usage and desktop integration](#usage-and-desktop-integration)
   - [Desktop entry](#desktop-entry)
-  - [Make Strata the Omarchy file manager](#make-strata-the-omarchy-file-manager)
+  - [Make BeeFileManager the Omarchy file manager](#make-beefilemanager-the-omarchy-file-manager)
   - [Network shares](#network-shares)
 - [Theming](#theming)
   - [Follow Omarchy Quattro](#follow-omarchy-quattro)
@@ -68,20 +68,20 @@ offers optional desktop-menu, default-folder-handler, "Open file location", SMB,
 broader image/RAW, and Omarchy keybind integration:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lgse/strata/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bartbeecoders/BeeFileManager/main/install.sh | bash
 ```
 
 The installer shows every privileged package operation before asking to run it.
 It verifies both the published SHA-256 digest and GitHub Actions provenance before
 installing anything from the release archive. The binary is installed per-user at
-`~/.local/bin/strata`.
+`~/.local/bin/beefilemanager`.
 
 For an unattended Arch or Omarchy installation, pass `--non-interactive`. This
 installs required dependencies and the binary without prompting; optional
 integrations remain disabled unless explicitly selected:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lgse/strata/main/install.sh \
+curl -fsSL https://raw.githubusercontent.com/bartbeecoders/BeeFileManager/main/install.sh \
   | bash -s -- --non-interactive \
       --with-smb \
       --with-raw \
@@ -102,12 +102,12 @@ Use this option to have a coding agent install and verify the latest release arc
 Give this prompt to a coding agent with terminal access:
 
 ```text
-Install the latest stable Strata release from https://github.com/lgse/strata safely.
+Install the latest stable BeeFileManager release from https://github.com/bartbeecoders/BeeFileManager safely.
 
 Before changing anything:
 1. Confirm this is a glibc-based Linux system with a graphical GTK4 environment.
 2. Detect whether the machine is x86_64 or aarch64 and select only the matching
-   *-unknown-linux-gnu archive from the canonical lgse/strata GitHub release.
+   *-unknown-linux-gnu archive from the canonical bartbeecoders/BeeFileManager GitHub release.
 3. Show me the runtime packages you need and ask before using sudo or changing
    my default file-manager association.
 
@@ -117,19 +117,19 @@ Then:
   package manager. Add gvfs-smb only if I want SMB support.
 - Download the archive and its matching .sha256 file from the latest GitHub release.
 - Verify the checksum with sha256sum --check and verify GitHub Actions provenance
-  with `gh attestation verify <archive> --repo lgse/strata`. Stop on any failure;
+  with `gh attestation verify <archive> --repo bartbeecoders/BeeFileManager`. Stop on any failure;
   never install an unverified binary.
-- Extract it and install `strata` to ~/.local/bin/strata without overwriting an
+- Extract it and install `beefilemanager` to ~/.local/bin/beefilemanager without overwriting an
   unrelated file. Ensure ~/.local/bin is on PATH.
 - Ask whether I want a per-user desktop entry and inode/directory association;
-  if yes, install the archive's io.github.lgse.Strata.desktop and io.github.lgse.Strata.svg
+  if yes, install the archive's io.github.bartbeecoders.BeeFileManager.desktop and io.github.bartbeecoders.BeeFileManager.svg
   under ~/.local/share, pointing Exec at the installed binary, then refresh the
   desktop database and icon cache.
-- Separately ask whether Strata should handle "Open file location" requests. If
+- Separately ask whether BeeFileManager should handle "Open file location" requests. If
   yes, verify no other per-user service provides org.freedesktop.FileManager1,
-  then install the archive's io.github.lgse.Strata.FileManager1.service under
+  then install the archive's io.github.bartbeecoders.BeeFileManager.FileManager1.service under
   ~/.local/share/dbus-1/services with Exec pointing at the installed binary.
-- Launch `strata`, report its installed version/source release, and verify the
+- Launch `beefilemanager`, report its installed version/source release, and verify the
   desktop association if one was requested. Do not weaken the preview sandbox.
 ```
 
@@ -143,7 +143,7 @@ Install the release archive directly if you prefer to perform each step yourself
 case "$(uname -m)" in
   x86_64)  target=x86_64-unknown-linux-gnu ;;
   aarch64) target=aarch64-unknown-linux-gnu ;;
-  *) echo "Strata has no prebuilt release for $(uname -m)" >&2; exit 1 ;;
+  *) echo "BeeFileManager has no prebuilt release for $(uname -m)" >&2; exit 1 ;;
 esac
 printf 'Use the %s release archive.\n' "$target"
 getconf GNU_LIBC_VERSION   # must report glibc 2.39 or newer
@@ -158,43 +158,43 @@ sudo pacman -S --needed bubblewrap ffmpeg ffmpegthumbnailer fontconfig \
 sudo pacman -S --needed gvfs-smb imagemagick libraw dcraw
 ```
 
-GTK **4.12 or newer** and glibc **2.39 or newer** are required. Other glibc-based distributions may work when they provide equivalent runtime libraries, but their package names and binary compatibility vary. Systems with an older glibc must [build Strata from source](#development-and-documentation).
+GTK **4.12 or newer** and glibc **2.39 or newer** are required. Other glibc-based distributions may work when they provide equivalent runtime libraries, but their package names and binary compatibility vary. Systems with an older glibc must [build BeeFileManager from source](#development-and-documentation).
 
 #### 2. Download and verify
 
-From the [latest release](https://github.com/lgse/strata/releases/latest), download the `.tar.gz` matching `$target` and its identically named `.sha256` file. Then verify both its digest and signed GitHub Actions provenance:
+From the [latest release](https://github.com/bartbeecoders/BeeFileManager/releases/latest), download the `.tar.gz` matching `$target` and its identically named `.sha256` file. Then verify both its digest and signed GitHub Actions provenance:
 
 ```bash
 cd ~/Downloads
-archive="strata-<version>-${target}.tar.gz"
+archive="beefilemanager-<version>-${target}.tar.gz"
 sha256sum --check "${archive}.sha256"
-gh attestation verify "$archive" --repo lgse/strata
+gh attestation verify "$archive" --repo bartbeecoders/BeeFileManager
 tar -xzf "$archive"
 ```
 
 Both verification commands must succeed. Install the binary and confirm it starts:
 
 ```bash
-install -Dm755 "${archive%.tar.gz}/strata" "$HOME/.local/bin/strata"
-command -v strata
-strata
+install -Dm755 "${archive%.tar.gz}/beefilemanager" "$HOME/.local/bin/beefilemanager"
+command -v beefilemanager
+beefilemanager
 ```
 
 If `command -v` fails, add `$HOME/.local/bin` to your shell's `PATH`. Every archive contains `SOURCE_COMMIT`, identifying the exact source revision used by GitHub Actions.
 
 #### Debug a release crash
 
-Download the matching `strata-<version>-<target>.debug` asset from the same release and place it beside the installed `strata` binary, keeping its filename unchanged. Then run `coredumpctl debug strata`; GDB will load its Rust function names and source lines.
+Download the matching `beefilemanager-<version>-<target>.debug` asset from the same release and place it beside the installed `beefilemanager` binary, keeping its filename unchanged. Then run `coredumpctl debug beefilemanager`; GDB will load its Rust function names and source lines.
 
 #### 3. Update or uninstall
 
 For a manual installation, use **Settings → Updates** for verified in-app updates, or repeat the download, verification, and `install` steps for a newer release. An in-app update also refreshes an already installed desktop entry and application icon from the new archive; it never creates desktop metadata that was not installed before. Package-managed installations are updated only by their system package manager. To remove a per-user installation:
 
 ```bash
-rm -f ~/.local/bin/strata \
-  ~/.local/share/applications/io.github.lgse.Strata.desktop \
-  ~/.local/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service \
-  ~/.local/share/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg
+rm -f ~/.local/bin/beefilemanager \
+  ~/.local/share/applications/io.github.bartbeecoders.BeeFileManager.desktop \
+  ~/.local/share/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service \
+  ~/.local/share/icons/hicolor/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg
 update-desktop-database ~/.local/share/applications 2>/dev/null || true
 gtk-update-icon-cache -qtf ~/.local/share/icons/hicolor 2>/dev/null || true
 ```
@@ -203,33 +203,33 @@ User preferences and custom themes remain under the XDG configuration directorie
 
 ## Usage and desktop integration
 
-Launch Strata with an optional local directory:
+Launch BeeFileManager with an optional local directory:
 
 ```bash
-strata                 # home directory
-strata ~/Documents     # a specific directory
+beefilemanager                 # home directory
+beefilemanager ~/Documents     # a specific directory
 ```
 
 Useful shortcuts include <kbd>Ctrl</kbd>+<kbd>K</kbd> for recursive search, <kbd>Ctrl</kbd>+<kbd>L</kbd> for a path or URI, <kbd>Ctrl</kbd>+<kbd>F</kbd> to filter the current pane, <kbd>Ctrl</kbd>+<kbd>Z</kbd> to undo the latest move or move to Trash, <kbd>Space</kbd> for preview, <kbd>F2</kbd> to rename, and <kbd>Alt</kbd>+arrow keys for history and parent navigation.
 
 ### Desktop entry
 
-Every release archive ships `io.github.lgse.Strata.desktop` and the Strata application icon `io.github.lgse.Strata.svg`. Install both to give Strata a per-user launcher with its own icon in launchers, docks, task switchers, and window overviews, and optionally make Strata the default directory handler:
+Every release archive ships `io.github.bartbeecoders.BeeFileManager.desktop` and the BeeFileManager application icon `io.github.bartbeecoders.BeeFileManager.svg`. Install both to give BeeFileManager a per-user launcher with its own icon in launchers, docks, task switchers, and window overviews, and optionally make BeeFileManager the default directory handler:
 
 ```bash
 cd ~/Downloads/"${archive%.tar.gz}"
-install -Dm644 io.github.lgse.Strata.svg \
-  ~/.local/share/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg
+install -Dm644 io.github.bartbeecoders.BeeFileManager.svg \
+  ~/.local/share/icons/hicolor/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg
 install -d ~/.local/share/applications
-sed "s|^Exec=strata |Exec=$HOME/.local/bin/strata |" io.github.lgse.Strata.desktop \
-  > ~/.local/share/applications/io.github.lgse.Strata.desktop
+sed "s|^Exec=beefilemanager |Exec=$HOME/.local/bin/beefilemanager |" io.github.bartbeecoders.BeeFileManager.desktop \
+  > ~/.local/share/applications/io.github.bartbeecoders.BeeFileManager.desktop
 update-desktop-database ~/.local/share/applications
 gtk-update-icon-cache -qtf ~/.local/share/icons/hicolor 2>/dev/null || true
-xdg-mime default io.github.lgse.Strata.desktop inode/directory
+xdg-mime default io.github.bartbeecoders.BeeFileManager.desktop inode/directory
 xdg-mime query default inode/directory
 ```
 
-The final command should print `io.github.lgse.Strata.desktop`. The desktop entry's filename matches the `io.github.lgse.Strata` application ID that Strata's windows report, so desktop shells match a running window to this entry and draw its `Icon` value. Log out and back in if a shell caches launcher icons.
+The final command should print `io.github.bartbeecoders.BeeFileManager.desktop`. The desktop entry's filename matches the `io.github.bartbeecoders.BeeFileManager` application ID that BeeFileManager's windows report, so desktop shells match a running window to this entry and draw its `Icon` value. Log out and back in if a shell caches launcher icons.
 
 When building from source, `make install-local` installs the binary, icon, and desktop entry in the same locations, and `make uninstall-local` removes them.
 
@@ -237,7 +237,7 @@ When building from source, `make install-local` installs the binary, icon, and d
 
 Browsers and GTK/GNOME applications reveal a file by calling the `org.freedesktop.FileManager1` D-Bus interface instead of consulting the `inode/directory` association. The interactive installer offers this separately; for unattended installation, pass `--with-file-manager`. Folder association enables it automatically.
 
-For a source installation, enable Strata as the per-user activatable provider explicitly:
+For a source installation, enable BeeFileManager as the per-user activatable provider explicitly:
 
 ```bash
 make install-file-manager
@@ -246,8 +246,8 @@ make install-file-manager
 For an AUR package, copy its inactive service template into your per-user service directory:
 
 ```bash
-install -Dm644 /usr/share/strata/io.github.lgse.Strata.FileManager1.service \
-  ~/.local/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service
+install -Dm644 /usr/share/beefilemanager/io.github.bartbeecoders.BeeFileManager.FileManager1.service \
+  ~/.local/share/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service
 ```
 
 For a release archive installation, install the included service manually instead:
@@ -255,23 +255,23 @@ For a release archive installation, install the included service manually instea
 ```bash
 cd ~/Downloads/"${archive%.tar.gz}"
 install -d ~/.local/share/dbus-1/services
-sed "s|^Exec=/usr/bin/strata |Exec=$HOME/.local/bin/strata |" \
-  io.github.lgse.Strata.FileManager1.service \
-  > ~/.local/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service
+sed "s|^Exec=/usr/bin/beefilemanager |Exec=$HOME/.local/bin/beefilemanager |" \
+  io.github.bartbeecoders.BeeFileManager.FileManager1.service \
+  > ~/.local/share/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service
 ```
 
-A per-user provider takes precedence over system providers shipped by other file managers. Before enabling Strata manually, remove any other per-user service whose `Name` is `org.freedesktop.FileManager1`; two providers for the same name in one service directory are chosen arbitrarily. If another file manager already owns the bus name, exit it before testing. Use `make uninstall-file-manager` for a source installation, or remove the per-user service file, to disable Strata again.
+A per-user provider takes precedence over system providers shipped by other file managers. Before enabling BeeFileManager manually, remove any other per-user service whose `Name` is `org.freedesktop.FileManager1`; two providers for the same name in one service directory are chosen arbitrarily. If another file manager already owns the bus name, exit it before testing. Use `make uninstall-file-manager` for a source installation, or remove the per-user service file, to disable BeeFileManager again.
 
-Strata then answers `ShowFolders`, `ShowItems`, and `ShowItemProperties`, opening the directory that holds the named items with those items selected:
+BeeFileManager then answers `ShowFolders`, `ShowItems`, and `ShowItemProperties`, opening the directory that holds the named items with those items selected:
 
 ```bash
 busctl --user call org.freedesktop.FileManager1 /org/freedesktop/FileManager1 \
   org.freedesktop.FileManager1 ShowItems ass 1 "file://$HOME/Downloads" ""
 ```
 
-### Make Strata the Omarchy file manager
+### Make BeeFileManager the Omarchy file manager
 
-The XDG association above handles folders opened by applications. On current Lua-based Omarchy releases, also override the stock Nautilus shortcuts in `~/.config/hypr/bindings.lua` so Omarchy launches Strata directly.
+The XDG association above handles folders opened by applications. On current Lua-based Omarchy releases, also override the stock Nautilus shortcuts in `~/.config/hypr/bindings.lua` so Omarchy launches BeeFileManager directly.
 
 First inspect the active bindings and back up your user configuration:
 
@@ -283,18 +283,18 @@ cp ~/.config/hypr/bindings.lua ~/.config/hypr/bindings.lua.bak.$(date +%s)
 Append these overrides to `~/.config/hypr/bindings.lua`:
 
 ```lua
--- Use Strata instead of Nautilus for Omarchy's file-manager shortcuts.
+-- Use BeeFileManager instead of Nautilus for Omarchy's file-manager shortcuts.
 hl.unbind("SUPER + SHIFT + F")
 hl.unbind("SUPER + ALT + SHIFT + F")
-o.bind("SUPER + SHIFT + F", "File manager", { launch = "strata" })
+o.bind("SUPER + SHIFT + F", "File manager", { launch = "beefilemanager" })
 o.bind("SUPER + ALT + SHIFT + F", "File manager (cwd)",
-  "uwsm-app -- strata \"$(omarchy-cmd-terminal-cwd)\"")
+  "uwsm-app -- beefilemanager \"$(omarchy-cmd-terminal-cwd)\"")
 ```
 
 The stock shortcut is <kbd>Super</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>, not <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>. To support the Ctrl chord too, first confirm that it is not assigned to another action, then optionally append:
 
 ```lua
-o.bind("CTRL + SHIFT + F", "File manager", { launch = "strata" })
+o.bind("CTRL + SHIFT + F", "File manager", { launch = "beefilemanager" })
 ```
 
 Apply and validate the configuration:
@@ -309,19 +309,19 @@ omarchy menu keybindings --print | grep -i "file manager"
 
 ### Network shares
 
-Press <kbd>Ctrl</kbd>+<kbd>L</kbd>, enter an address such as `smb://server/share`, and press <kbd>Enter</kbd>. Strata uses GIO/GVfs and prompts for credentials when required. Install your distribution's SMB GVfs backend (`gvfs-smb` on Arch) to enable SMB browsing.
+Press <kbd>Ctrl</kbd>+<kbd>L</kbd>, enter an address such as `smb://server/share`, and press <kbd>Enter</kbd>. BeeFileManager uses GIO/GVfs and prompts for credentials when required. Install your distribution's SMB GVfs backend (`gvfs-smb` on Arch) to enable SMB browsing.
 
 ## Theming
 
 Open **Settings → Theme & appearance** from the gear menu or with <kbd>Ctrl</kbd>+<kbd>,</kbd>. Theme changes apply immediately across the interface.
 
-![Strata Theme and appearance settings showing Omarchy following, six bundled themes, and the Add a theme option](docs/assets/strata-themes.png)
+![BeeFileManager Theme and appearance settings showing Omarchy following, six bundled themes, and the Add a theme option](docs/assets/beefilemanager-themes.png)
 
 ### Follow Omarchy Quattro
 
-On **Omarchy Quattro**, turn on **Follow Omarchy** under **Settings → Theme & appearance**. Strata maps the active Omarchy palette to its semantic colors, monitors the current theme, and updates live whenever Omarchy's theme changes.
+On **Omarchy Quattro**, turn on **Follow Omarchy** under **Settings → Theme & appearance**. BeeFileManager maps the active Omarchy palette to its semantic colors, monitors the current theme, and updates live whenever Omarchy's theme changes.
 
-This integration supports Omarchy Quattro only. The switch is hidden when Strata cannot find a valid Quattro current-theme state; legacy Omarchy theme layouts are not supported.
+This integration supports Omarchy Quattro only. The switch is hidden when BeeFileManager cannot find a valid Quattro current-theme state; legacy Omarchy theme layouts are not supported.
 
 ### Bundled themes
 
@@ -329,13 +329,13 @@ Choose any included theme from **Settings → Theme & appearance**: Azure Glow, 
 
 ### Custom themes
 
-Select **Add a theme**, enter a name, and choose the semantic colors for the background, surfaces, text, accent, danger, muted and highlighted elements, borders, and dimmed text. Strata previews edits live and saves completed themes under **Your themes**.
+Select **Add a theme**, enter a name, and choose the semantic colors for the background, surfaces, text, accent, danger, muted and highlighted elements, borders, and dimmed text. BeeFileManager previews edits live and saves completed themes under **Your themes**.
 
-Custom themes are stored as shareable TOML files in `~/.config/strata/themes/`. See [Themes](docs/themes.md) for the schema, file location, and Omarchy color mapping.
+Custom themes are stored as shareable TOML files in `~/.config/beefilemanager/themes/`. See [Themes](docs/themes.md) for the schema, file location, and Omarchy color mapping.
 
 ## Release channels
 
-Strata defaults to the **Stable** channel: only final tagged releases are ever offered, and a Stable install never receives, sees, or is notified about a prerelease.
+BeeFileManager defaults to the **Stable** channel: only final tagged releases are ever offered, and a Stable install never receives, sees, or is notified about a prerelease.
 
 To try upcoming changes early, choose a channel in **Settings → Updates**. **Preview** receives curated alpha, beta, and release-candidate builds but excludes nightlies. **Nightly** receives every recognised prerelease, including daily development builds. The update dialog and release notes always identify the exact build kind.
 
@@ -347,7 +347,7 @@ See [Releasing](docs/releasing.md) for the tag grammar these channels rely on an
 
 ### Why search stays fast
 
-Strata walks and indexes the selected directory tree on a background thread, never on GTK's UI thread. Results appear progressively during that walk. Names and relative paths are normalized once as index entries are created, and each query maintains only the best **100** fuzzy-ranked matches instead of sending an unbounded result set to the interface.
+BeeFileManager walks and indexes the selected directory tree on a background thread, never on GTK's UI thread. Results appear progressively during that walk. Names and relative paths are normalized once as index entries are created, and each query maintains only the best **100** fuzzy-ranked matches instead of sending an unbounded result set to the interface.
 
 Rapid keystrokes are coalesced to the newest query. During indexing, result publication is throttled to 50 ms intervals; the UI consumes those bounded updates on its own timed loop, keeping rendering aligned with responsive frame-sized work. Exact and contiguous matches, word/path boundaries, and names rank ahead of loose path subsequences.
 
@@ -355,9 +355,9 @@ The deliberate tradeoff: this is fast **filename and path** search, not file-con
 
 ### How previews contain untrusted parsers
 
-Files shown while browsing are untrusted. Image, camera RAW, PDF, thumbnail, and media parsing therefore runs out of process through **Bubblewrap**, not inside the main Strata process. Each short-lived helper receives namespace isolation, a minimal read-only runtime, exactly one canonicalized input file, private output and temporary directories, no network, and no capabilities. Memory, CPU/wall time, input, file, and parent-side output limits bound the work.
+Files shown while browsing are untrusted. Image, camera RAW, PDF, thumbnail, and media parsing therefore runs out of process through **Bubblewrap**, not inside the main BeeFileManager process. Each short-lived helper receives namespace isolation, a minimal read-only runtime, exactly one canonicalized input file, private output and temporary directories, no network, and no capabilities. Memory, CPU/wall time, input, file, and parent-side output limits bound the work.
 
-Only media helpers may receive allowlisted GPU render devices, and only for accelerated transcoding; image, PDF, and thumbnail helpers receive no device mounts. Outputs are normalized and bounded, then checked for expected PNG, MP4, or WebM signatures before use. Cancellation or timeout kills the process group and Bubblewrap PID namespace, tearing down descendants. Missing isolation, crashes, malformed output, timeouts, and permission failures all fail closed to a normal icon or **Preview unavailable**—Strata never silently retries an untrusted native parser without the sandbox.
+Only media helpers may receive allowlisted GPU render devices, and only for accelerated transcoding; image, PDF, and thumbnail helpers receive no device mounts. Outputs are normalized and bounded, then checked for expected PNG, MP4, or WebM signatures before use. Cancellation or timeout kills the process group and Bubblewrap PID namespace, tearing down descendants. Missing isolation, crashes, malformed output, timeouts, and permission failures all fail closed to a normal icon or **Preview unavailable**—BeeFileManager never silently retries an untrusted native parser without the sandbox.
 
 Plain-text and source previews are different: they stay in process because they do not invoke a native format parser, and reads are capped at 1 MiB. See [Preview sandbox](docs/preview-sandbox.md) for provider ordering, exact mounts, formats, and resource budgets.
 
@@ -397,12 +397,12 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Dee
 
 ## Contributors
 
-<a href="https://github.com/lgse/strata/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=lgse/strata" alt="Avatars of Strata contributors linked to the contributors graph">
-</a>
+BeeFileManager is derived from [Strata](https://github.com/lgse/strata). Thank you to the original Strata contributors, and to everyone who reports issues, improves the documentation, tests releases, and contributes code.
 
-This image is generated from GitHub contribution data so new contributors appear without a manual README update. Thank you to everyone who reports issues, improves the documentation, tests releases, and contributes code.
+<a href="https://github.com/bartbeecoders/BeeFileManager/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=bartbeecoders/BeeFileManager" alt="Avatars of BeeFileManager contributors linked to the contributors graph">
+</a>
 
 ## License
 
-Strata is free software licensed under **[GPL-3.0-or-later](LICENSE)**. Bundled fonts, icons, and other third-party components retain their own notices in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
+BeeFileManager is derived from [Strata](https://github.com/lgse/strata) by LGSE Ltd. and is free software licensed under **[GPL-3.0-or-later](LICENSE)**. Bundled fonts, icons, and other third-party components retain their own notices in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).

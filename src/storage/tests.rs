@@ -68,7 +68,7 @@ fn non_regular_destination_is_rejected() -> io::Result<()> {
 fn test_directory() -> io::Result<PathBuf> {
     loop {
         let path = std::env::temp_dir().join(format!(
-            "strata-storage-{}-{}",
+            "beefilemanager-storage-{}-{}",
             std::process::id(),
             NEXT_TEMP_FILE.fetch_add(1, Ordering::Relaxed)
         ));

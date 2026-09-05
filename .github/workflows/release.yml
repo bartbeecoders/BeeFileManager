@@ -162,7 +162,7 @@ jobs:
           if [[ "$MODE" != "stable" ]]; then
             # Fail closed when targeting source older than release-channel
             # support; otherwise the archive tag and binary identity diverge.
-            if ! grep -q 'STRATA_RELEASE_TAG' build.rs; then
+            if ! grep -q 'BEEFILEMANAGER_RELEASE_TAG' build.rs; then
               echo "The selected source does not support prerelease build metadata." >&2
               exit 1
             fi
@@ -170,8 +170,8 @@ jobs:
             # Prerelease identity is injected at build time instead of being
             # written into Cargo.toml, which remains the stable version line.
             {
-              echo "STRATA_RELEASE_TAG=v${VERSION}"
-              echo "STRATA_BUILD_KIND=${MODE}"
+              echo "BEEFILEMANAGER_RELEASE_TAG=v${VERSION}"
+              echo "BEEFILEMANAGER_BUILD_KIND=${MODE}"
             } >> "$GITHUB_ENV"
             exit 0
           fi
@@ -198,13 +198,13 @@ jobs:
           lock_path = pathlib.Path("Cargo.lock")
           lock = lock_path.read_text()
           lock, count = re.subn(
-              r'(\[\[package\]\]\nname = "strata"\nversion = ")\d+\.\d+\.\d+("\n)',
+              r'(\[\[package\]\]\nname = "beefilemanager"\nversion = ")\d+\.\d+\.\d+("\n)',
               rf'\g<1>{version}\2',
               lock,
               count=1,
           )
           if count != 1:
-              raise SystemExit("could not update the strata version in Cargo.lock")
+              raise SystemExit("could not update the beefilemanager version in Cargo.lock")
           lock_path.write_text(lock)
           PY
 
@@ -235,17 +235,17 @@ jobs:
           TARGET: ${{ matrix.target }}
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          package="strata-${VERSION}-${TARGET}"
+          package="beefilemanager-${VERSION}-${TARGET}"
           mkdir -p "dist/$package"
-          install -m 755 "target/$TARGET/release/strata" "dist/$package/strata"
-          objcopy --only-keep-debug --compress-debug-sections=zlib "dist/$package/strata" "dist/$package.debug"
-          strip --strip-unneeded "dist/$package/strata"
-          objcopy --add-gnu-debuglink="dist/$package.debug" "dist/$package/strata"
+          install -m 755 "target/$TARGET/release/beefilemanager" "dist/$package/beefilemanager"
+          objcopy --only-keep-debug --compress-debug-sections=zlib "dist/$package/beefilemanager" "dist/$package.debug"
+          strip --strip-unneeded "dist/$package/beefilemanager"
+          objcopy --add-gnu-debuglink="dist/$package.debug" "dist/$package/beefilemanager"
           printf '%s\n' "$SOURCE_SHA" > "dist/$package/SOURCE_COMMIT"
           cp README.md LICENSE THIRD_PARTY_LICENSES.md "dist/$package/"
-          install -m 644 data/io.github.lgse.Strata.desktop "dist/$package/"
-          install -m 644 data/io.github.lgse.Strata.FileManager1.service "dist/$package/"
-          install -m 644 data/icons/scalable/apps/io.github.lgse.Strata.svg "dist/$package/"
+          install -m 644 data/io.github.bartbeecoders.BeeFileManager.desktop "dist/$package/"
+          install -m 644 data/io.github.bartbeecoders.BeeFileManager.FileManager1.service "dist/$package/"
+          install -m 644 data/icons/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg "dist/$package/"
           tar -C dist -czf "dist/$package.tar.gz" "$package"
           (cd dist && sha256sum "$package.tar.gz" > "$package.tar.gz.sha256")
           (cd dist && sha256sum "$package.debug" > "$package.debug.sha256")
@@ -253,7 +253,7 @@ jobs:
       - name: Upload release artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: strata-${{ matrix.target }}
+          name: beefilemanager-${{ matrix.target }}
           path: |
             dist/*.tar.gz
             dist/*.debug
@@ -313,7 +313,7 @@ jobs:
               exit 1
             fi
 
-            git tag -a "v$VERSION" -m "Strata v$VERSION"
+            git tag -a "v$VERSION" -m "BeeFileManager v$VERSION"
             git push origin "v$VERSION"
             exit 0
           fi
@@ -336,7 +336,7 @@ jobs:
           version = os.environ["VERSION"]
           for filename, pattern in (
               ("Cargo.toml", r'(^version = ")\d+\.\d+\.\d+("$)'),
-              ("Cargo.lock", r'(\[\[package\]\]\nname = "strata"\nversion = ")\d+\.\d+\.\d+("\n)'),
+              ("Cargo.lock", r'(\[\[package\]\]\nname = "beefilemanager"\nversion = ")\d+\.\d+\.\d+("\n)'),
           ):
               path = pathlib.Path(filename)
               text, count = re.subn(pattern, rf'\g<1>{version}\2', path.read_text(), count=1, flags=re.MULTILINE)
@@ -347,7 +347,7 @@ jobs:
 
           git add Cargo.toml Cargo.lock
           git commit -m "chore: release v$VERSION"
-          git tag -a "v$VERSION" -m "Strata v$VERSION"
+          git tag -a "v$VERSION" -m "BeeFileManager v$VERSION"
           git push --atomic origin "HEAD:$BRANCH" "v$VERSION"
 
       - name: Create GitHub release
@@ -359,9 +359,9 @@ jobs:
           if [[ "$MODE" != "stable" ]]; then
             # --prerelease keeps /releases/latest pointing at the last final
             # release, which is the endpoint a Stable user polls.
-            gh release create "v$VERSION" dist/* --verify-tag --generate-notes --prerelease --title "Strata v$VERSION"
+            gh release create "v$VERSION" dist/* --verify-tag --generate-notes --prerelease --title "BeeFileManager v$VERSION"
           else
-            gh release create "v$VERSION" dist/* --verify-tag --generate-notes --title "Strata v$VERSION"
+            gh release create "v$VERSION" dist/* --verify-tag --generate-notes --title "BeeFileManager v$VERSION"
           fi
 
   package:
@@ -402,7 +402,7 @@ jobs:
           fi
 
           candidate=$(python3 -c 'import sys; from scripts.update_aur import package_version; print(package_version(sys.argv[1]))' "$VERSION")
-          current=$(grep -m1 '^pkgver=' packaging/aur/strata-rc-bin/PKGBUILD | cut -d= -f2)
+          current=$(grep -m1 '^pkgver=' packaging/aur/beefilemanager-rc-bin/PKGBUILD | cut -d= -f2)
           if (( $(vercmp "$candidate" "$current") >= 0 )); then
             args+=(--preview "$VERSION")
           fi
@@ -437,7 +437,7 @@ jobs:
           cat > /tmp/aur-package-pr.md <<EOF
           ## Description
 
-          Updates the reviewed AUR package sources for Strata v$VERSION.
+          Updates the reviewed AUR package sources for BeeFileManager v$VERSION.
 
           ## How to test
 

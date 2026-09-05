@@ -13,7 +13,7 @@ INSTALLER = ROOT / "install.sh"
 
 def bash(script: str, *, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
     test_env = os.environ.copy()
-    test_env["STRATA_INSTALLER_TESTING"] = "1"
+    test_env["BEEFILEMANAGER_INSTALLER_TESTING"] = "1"
     if env:
         test_env.update(env)
     return subprocess.run(
@@ -35,7 +35,7 @@ class InstallerTests(unittest.TestCase):
     def test_banner_remains_readable_without_terminal_color(self) -> None:
         result = bash("show_banner", env={"NO_COLOR": "1"})
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("S T R A T A", result.stdout)
+        self.assertIn("BeeFileManager", result.stdout)
         self.assertIn("Navigate every layer.", result.stdout)
         self.assertIn("Interactive installer", result.stdout)
         self.assertNotIn("\033", result.stdout)
@@ -67,17 +67,17 @@ class InstallerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as home:
             result = bash(
                 'TEMP_DIR="$HOME/tmp"; mkdir -p "$TEMP_DIR"; '
-                'BIN_PATH="$HOME/.local/bin/strata"; '
+                'BIN_PATH="$HOME/.local/bin/beefilemanager"; '
                 'install_file_manager_service "$(dirname "$1")/data"',
                 env={"HOME": home, "XDG_DATA_HOME": f"{home}/data"},
             )
             service = (
                 pathlib.Path(home)
-                / "data/dbus-1/services/io.github.lgse.Strata.FileManager1.service"
+                / "data/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service"
             )
             contents = service.read_text()
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn(f"Exec={home}/.local/bin/strata --gapplication-service", contents)
+        self.assertIn(f"Exec={home}/.local/bin/beefilemanager --gapplication-service", contents)
 
     def test_file_manager_service_refuses_another_per_user_provider(self) -> None:
         with tempfile.TemporaryDirectory() as home:
@@ -91,11 +91,11 @@ class InstallerTests(unittest.TestCase):
             )
             result = bash(
                 'TEMP_DIR="$HOME/tmp"; mkdir -p "$TEMP_DIR"; '
-                'BIN_PATH="$HOME/.local/bin/strata"; '
+                'BIN_PATH="$HOME/.local/bin/beefilemanager"; '
                 'install_file_manager_service "$(dirname "$1")/data"',
                 env={"HOME": home, "XDG_DATA_HOME": f"{home}/data"},
             )
-            target = service_dir / "io.github.lgse.Strata.FileManager1.service"
+            target = service_dir / "io.github.bartbeecoders.BeeFileManager.FileManager1.service"
             self.assertFalse(target.exists())
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Another per-user FileManager1 provider", result.stderr)
@@ -156,7 +156,7 @@ class InstallerTests(unittest.TestCase):
         for major, suffix in (("3", "conf"), ("4", "lua")):
             with self.subTest(major=major), tempfile.TemporaryDirectory() as home:
                 result = bash(
-                    f'BIN_PATH="$HOME/.local/bin/strata"; '
+                    f'BIN_PATH="$HOME/.local/bin/beefilemanager"; '
                     f"configure_omarchy_bindings {major}; "
                     f"configure_omarchy_bindings {major}",
                     env={"HOME": home, "HYPRLAND_INSTANCE_SIGNATURE": ""},
@@ -164,11 +164,11 @@ class InstallerTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 bindings = pathlib.Path(home) / ".config" / "hypr" / f"bindings.{suffix}"
                 contents = bindings.read_text()
-                self.assertEqual(contents.count("strata-installer: file-manager start"), 1)
-                self.assertIn(f"{home}/.local/bin/strata", contents)
+                self.assertEqual(contents.count("beefilemanager-installer: file-manager start"), 1)
+                self.assertIn(f"{home}/.local/bin/beefilemanager", contents)
                 if major == "4":
                     self.assertIn(
-                        f'"uwsm-app -- {home}/.local/bin/strata '
+                        f'"uwsm-app -- {home}/.local/bin/beefilemanager '
                         '\\"$(omarchy-cmd-terminal-cwd)\\""',
                         contents,
                     )

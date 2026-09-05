@@ -4,10 +4,10 @@ on:
   push:
     branches: [main]
     paths:
-      - 'packaging/aur/strata-bin/PKGBUILD'
-      - 'packaging/aur/strata-bin/.SRCINFO'
-      - 'packaging/aur/strata-rc-bin/PKGBUILD'
-      - 'packaging/aur/strata-rc-bin/.SRCINFO'
+      - 'packaging/aur/beefilemanager-bin/PKGBUILD'
+      - 'packaging/aur/beefilemanager-bin/.SRCINFO'
+      - 'packaging/aur/beefilemanager-rc-bin/PKGBUILD'
+      - 'packaging/aur/beefilemanager-rc-bin/.SRCINFO'
   workflow_dispatch:
 
 permissions:
@@ -48,9 +48,9 @@ jobs:
 
       - name: Publish packages
         run: |
-          git config --global user.name "strata-release-bot"
+          git config --global user.name "beefilemanager-release-bot"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          for package in strata-bin strata-rc-bin; do
+          for package in beefilemanager-bin beefilemanager-rc-bin; do
             checkout=$(mktemp -d)
             git clone "ssh://aur@aur.archlinux.org/${package}.git" "$checkout"
             install -m 644 "packaging/aur/$package/PKGBUILD" "$checkout/PKGBUILD"

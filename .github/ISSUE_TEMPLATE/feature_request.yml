@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an improvement or new capability for Strata
+description: Suggest an improvement or new capability for BeeFileManager
 title: ""
 labels: [enhancement]
 body:
@@ -20,7 +20,7 @@ body:
     id: proposal
     attributes:
       label: Proposed solution
-      description: Briefly describe how you would like Strata to address the problem.
+      description: Briefly describe how you would like BeeFileManager to address the problem.
     validations:
       required: true
 
@@ -39,7 +39,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Strata version
+      label: BeeFileManager version
       description: Optional. Find this under Settings → Updates, or provide the commit SHA for a source build.
       placeholder: e.g. 0.5.0 or commit abc1234
 

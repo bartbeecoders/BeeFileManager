@@ -5,7 +5,7 @@ use std::fs;
 #[test]
 fn renders_requested_pdf_pages_within_the_pixel_budget() {
     let path = std::env::temp_dir().join(format!(
-        "strata-preview-{}-{}.pdf",
+        "beefilemanager-preview-{}-{}.pdf",
         std::process::id(),
         std::thread::current().name().unwrap_or("test")
     ));

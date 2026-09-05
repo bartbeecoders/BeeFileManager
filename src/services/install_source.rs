@@ -10,7 +10,7 @@ use serde::Deserialize;
 
 use crate::services::Channel;
 
-const MARKER_RELATIVE_PATH: &str = "share/strata/install-source.toml";
+const MARKER_RELATIVE_PATH: &str = "share/beefilemanager/install-source.toml";
 
 const UNNAMED_MANAGER: &str = "your package manager";
 
@@ -114,17 +114,17 @@ impl ManagedInstall {
 
     fn update_instruction_with(&self, available: impl Fn(&str) -> bool + Copy) -> String {
         if let Some(command) = self.update_command.as_deref() {
-            return format!("Update Strata with: {command}");
+            return format!("Update BeeFileManager with: {command}");
         }
         if let Some((helper, package)) = self.aur_update_target_with(available) {
-            return format!("Update Strata with: {helper} -Syu {package}");
+            return format!("Update BeeFileManager with: {helper} -Syu {package}");
         }
         if let (Some(helper), Some(package)) = (self.aur_helpers.first(), self.package()) {
             return format!(
-                "Update Strata with an AUR helper, for example: {helper} -Syu {package}"
+                "Update BeeFileManager with an AUR helper, for example: {helper} -Syu {package}"
             );
         }
-        format!("Update Strata through {}.", self.manager())
+        format!("Update BeeFileManager through {}.", self.manager())
     }
 
     pub fn tracked_channel(&self) -> Option<Channel> {

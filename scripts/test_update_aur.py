@@ -121,12 +121,12 @@ class PackageValuesTests(unittest.TestCase):
         self.checksums = {"x86_64": DIGEST, "aarch64": OTHER_DIGEST}
 
     def test_the_stable_package_tracks_the_stable_channel(self):
-        values = package_values("strata-bin", "0.7.0", 1, self.checksums)
+        values = package_values("beefilemanager-bin", "0.7.0", 1, self.checksums)
 
         self.assertEqual(values["PKGVER"], "0.7.0")
         self.assertEqual(values["RELEASEVER"], "0.7.0")
         self.assertEqual(values["CHANNEL"], "stable")
-        self.assertEqual(values["ALTERNATE"], "strata-rc-bin")
+        self.assertEqual(values["ALTERNATE"], "beefilemanager-rc-bin")
 
     def test_no_package_names_a_pacman_update_command(self):
         for pkgname in PACKAGES:
@@ -134,7 +134,7 @@ class PackageValuesTests(unittest.TestCase):
             self.assertNotIn("UPDATE_COMMAND", values)
 
     def test_the_rc_package_keeps_the_unmangled_release_version(self):
-        values = package_values("strata-rc-bin", "0.8.0-rc.1", 1, self.checksums)
+        values = package_values("beefilemanager-rc-bin", "0.8.0-rc.1", 1, self.checksums)
 
         self.assertEqual(values["PKGVER"], "0.8.0rc.1")
         self.assertEqual(
@@ -143,10 +143,10 @@ class PackageValuesTests(unittest.TestCase):
             "the download URL must use the real release tag, not the mangled pkgver",
         )
         self.assertEqual(values["CHANNEL"], "rc")
-        self.assertEqual(values["ALTERNATE"], "strata-bin")
+        self.assertEqual(values["ALTERNATE"], "beefilemanager-bin")
 
     def test_each_architecture_keeps_its_own_checksum(self):
-        values = package_values("strata-bin", "0.7.0", 1, self.checksums)
+        values = package_values("beefilemanager-bin", "0.7.0", 1, self.checksums)
 
         self.assertEqual(values["SHA256_X86_64"], DIGEST)
         self.assertEqual(values["SHA256_AARCH64"], OTHER_DIGEST)

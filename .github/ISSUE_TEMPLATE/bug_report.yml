@@ -1,17 +1,17 @@
 name: Bug report
-description: Report broken or unexpected behavior in Strata
+description: Report broken or unexpected behavior in BeeFileManager
 title: ""
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve Strata. Please search existing issues before submitting a new report.
+        Thanks for helping improve BeeFileManager. Please search existing issues before submitting a new report.
 
   - type: input
     id: version
     attributes:
-      label: Strata version
+      label: BeeFileManager version
       description: Find this under Settings → Updates, or provide the commit SHA for a source build.
       placeholder: e.g. 0.5.0 or commit abc1234
     validations:
@@ -61,7 +61,7 @@ body:
     id: expected
     attributes:
       label: Expected behavior
-      description: What did you expect Strata to do?
+      description: What did you expect BeeFileManager to do?
     validations:
       required: true
 
@@ -76,17 +76,17 @@ body:
       value: |
         ### Crash logs
 
-        If Strata crashed, look for its latest systemd-coredump report with:
+        If BeeFileManager crashed, look for its latest systemd-coredump report with:
 
         ```shell
-        coredumpctl list strata
-        coredumpctl info strata
+        coredumpctl list beefilemanager
+        coredumpctl info beefilemanager
         ```
 
         Additional application messages may be available with:
 
         ```shell
-        journalctl --user _COMM=strata --since "30 minutes ago"
+        journalctl --user _COMM=beefilemanager --since "30 minutes ago"
         ```
 
         Paste relevant text below after removing private paths, filenames, hostnames, and secrets. **Do not upload a core dump**: it can contain passwords, tokens, and private document contents.

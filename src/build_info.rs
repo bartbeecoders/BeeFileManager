@@ -4,7 +4,7 @@ use crate::services::{BuildKind, Version};
 
 pub const DESCRIPTION: &str = env!("CARGO_PKG_DESCRIPTION");
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
-pub const COMMIT: &str = env!("STRATA_BUILD_COMMIT");
+pub const COMMIT: &str = env!("BEEFILEMANAGER_BUILD_COMMIT");
 pub const REPOSITORY: &str = env!("CARGO_PKG_REPOSITORY");
 pub const AUTHOR: &str = env!("CARGO_PKG_AUTHORS");
 
@@ -12,20 +12,20 @@ pub const AUTHOR: &str = env!("CARGO_PKG_AUTHORS");
 /// `v0.5.0-rc.1`.
 ///
 /// Injected by `build.rs`, mirroring how it injects [`COMMIT`]. Defaults to
-/// `v{CARGO_PKG_VERSION}` when `STRATA_RELEASE_TAG` is unset or empty --
+/// `v{CARGO_PKG_VERSION}` when `BEEFILEMANAGER_RELEASE_TAG` is unset or empty --
 /// i.e. every developer build -- so this is where prerelease identity
 /// travels without ever bumping `Cargo.toml` for an RC (see D3 in the
 /// release-channel design notes).
-pub const RELEASE_TAG: &str = env!("STRATA_RELEASE_TAG");
+pub const RELEASE_TAG: &str = env!("BEEFILEMANAGER_RELEASE_TAG");
 
 /// The build kind this binary was published as, as the raw string
 /// `build.rs` injected: `"stable"`, `"alpha"`, `"beta"`, `"rc"`, or
 /// `"nightly"`.
 ///
-/// Defaults to `"stable"` when `STRATA_BUILD_KIND` is unset, empty, or not
+/// Defaults to `"stable"` when `BEEFILEMANAGER_BUILD_KIND` is unset, empty, or not
 /// one of those three values. Prefer [`build_kind`] over reading this
 /// directly -- it gives the parsed, comparable [`BuildKind`].
-pub const BUILD_KIND: &str = env!("STRATA_BUILD_KIND");
+pub const BUILD_KIND: &str = env!("BEEFILEMANAGER_BUILD_KIND");
 
 /// Parses [`BUILD_KIND`], falling back to [`BuildKind::Stable`] for
 /// anything unrecognised.

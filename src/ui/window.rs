@@ -103,7 +103,7 @@ fn present_target(
 
     let window = gtk::ApplicationWindow::builder()
         .application(application)
-        .title("Strata")
+        .title("BeeFileManager")
         .default_width(1200)
         .default_height(760)
         .build();
@@ -402,10 +402,10 @@ fn present_target(
         if let Some((release, download_url, update_method)) = release {
             let tooltip = match update_method {
                 crate::services::UpdateMethod::InPlace => {
-                    format!("Install Strata v{}", release.version)
+                    format!("Install BeeFileManager v{}", release.version)
                 }
                 crate::services::UpdateMethod::Aur => format!(
-                    "Strata v{} is available through {}",
+                    "BeeFileManager v{} is available through {}",
                     release.version,
                     crate::services::InstallSource::detect()
                         .managed()
@@ -413,10 +413,16 @@ fn present_target(
                         .unwrap_or("your package manager")
                 ),
                 crate::services::UpdateMethod::Omarchy => {
-                    format!("Strata v{} is available through Omarchy", release.version)
+                    format!(
+                        "BeeFileManager v{} is available through Omarchy",
+                        release.version
+                    )
                 }
                 crate::services::UpdateMethod::Pacman => {
-                    format!("Strata v{} is available through pacman", release.version)
+                    format!(
+                        "BeeFileManager v{} is available through pacman",
+                        release.version
+                    )
                 }
             };
             update_button.set_tooltip_text(Some(&tooltip));

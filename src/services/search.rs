@@ -88,7 +88,7 @@ fn index_tree_with_budget(
     let cancelled = Arc::new(AtomicBool::new(false));
     let worker_cancelled = cancelled.clone();
     let _worker = std::thread::Builder::new()
-        .name("strata-search-index".into())
+        .name("beefilemanager-search-index".into())
         .spawn(move || {
             let mut index = Vec::new();
             let mut progress = WalkProgress::default();
