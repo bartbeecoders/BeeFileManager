@@ -1,6 +1,6 @@
 # Releasing
 
-Strata publishes signed, attested Linux binaries through the **Release** GitHub Actions workflow (`.github/workflows/release.yml`). This is the maintainer runbook for cutting a release, plus the tag grammar the self-updater depends on.
+BeeFileManager publishes signed, attested Linux binaries through the **Release** GitHub Actions workflow (`.github/workflows/release.yml`). This is the maintainer runbook for cutting a release, plus the tag grammar the self-updater depends on.
 
 ## Tag grammar
 
@@ -42,7 +42,7 @@ RC and nightly publication are intentionally manual. To promote a validated RC l
 
 ## Debugging a release build
 
-Each release includes a `strata-VERSION-TARGET.debug` file matching its stripped binary. Download the debug file for the installed version and architecture, place it beside the `strata` binary, then run `coredumpctl debug strata`; GDB follows the binary's embedded debug link to load Rust function names and source lines.
+Each release includes a `beefilemanager-VERSION-TARGET.debug` file matching its stripped binary. Download the debug file for the installed version and architecture, place it beside the `beefilemanager` binary, then run `coredumpctl debug beefilemanager`; GDB follows the binary's embedded debug link to load Rust function names and source lines.
 
 ## Version calculation
 

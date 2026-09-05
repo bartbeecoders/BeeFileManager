@@ -28,7 +28,7 @@ fn grid(skeleton: &gtk::Box) -> gtk::GridView {
 
 #[test]
 fn mode_specific_structure() {
-    const CHILD: &str = "STRATA_SKELETON_TEST_CHILD";
+    const CHILD: &str = "BEEFILEMANAGER_SKELETON_TEST_CHILD";
     if std::env::var_os(CHILD).is_none() {
         let status = std::process::Command::new(std::env::current_exe().expect("test executable"))
             .args([
@@ -177,11 +177,11 @@ fn gallery(before: bool, density: BrowserDensity, thumbnail_size: i32) -> gtk::B
 }
 
 #[test]
-#[ignore = "renders GTK comparison images; requires a display and STRATA_SKELETON_VISUALS"]
+#[ignore = "renders GTK comparison images; requires a display and BEEFILEMANAGER_SKELETON_VISUALS"]
 fn capture_comparison() {
     gtk::init().expect("visual capture requires a display");
     let output = std::path::PathBuf::from(
-        std::env::var_os("STRATA_SKELETON_VISUALS").expect("visual output directory"),
+        std::env::var_os("BEEFILEMANAGER_SKELETON_VISUALS").expect("visual output directory"),
     );
     std::fs::create_dir_all(&output).expect("create visual output directory");
     let provider = gtk::CssProvider::new();
@@ -214,7 +214,7 @@ fn capture_comparison() {
         themes.preview(&theme.tokens);
         let gallery = gallery(before, density, size);
         let window = gtk::Window::builder()
-            .title("Strata loading skeleton comparison")
+            .title("BeeFileManager loading skeleton comparison")
             .default_width(960)
             .default_height(1020)
             .child(&gallery)

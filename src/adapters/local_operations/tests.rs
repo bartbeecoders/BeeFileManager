@@ -192,7 +192,7 @@ fn recursive_copy_preserves_nested_directory_contents() -> Result<(), Box<dyn Er
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-transfer-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-transfer-test-{unique}"));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(source.join("nested"))?;
@@ -235,7 +235,7 @@ fn copy_recursively_does_not_follow_a_symlink_nested_inside_the_tree() -> Result
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-copy-symlink-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-copy-symlink-test-{unique}"));
     let source = root.join("source");
     let outside = root.join("outside");
     let target = root.join("target");
@@ -281,7 +281,7 @@ fn copy_recursively_of_a_symlink_creates_a_symlink_not_a_recursive_copy()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-copy-symlink-top-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-copy-symlink-top-test-{unique}"));
     let outside = root.join("outside");
     let decoy = root.join("decoy");
     let target = root.join("target-link");
@@ -318,7 +318,8 @@ fn staged_file_replacement_preserves_the_destination_on_disk_full() -> Result<()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-replacement-failure-test-{unique}"));
+    let root =
+        std::env::temp_dir().join(format!("beefilemanager-replacement-failure-test-{unique}"));
     let source = root.join("source.txt");
     let target = root.join("target.txt");
     fs::create_dir_all(&root)?;
@@ -375,7 +376,7 @@ fn moving_a_directory_falls_back_to_a_safe_copy_when_the_move_would_recurse()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-move-fallback-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-move-fallback-test-{unique}"));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(source.join("nested"))?;
@@ -406,7 +407,7 @@ fn a_non_would_recurse_move_failure_is_returned_without_falling_back() -> Result
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-move-real-failure-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-move-real-failure-test-{unique}"));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(&source)?;
@@ -441,7 +442,7 @@ fn a_successful_move_attempt_is_used_without_falling_back_to_copy() -> Result<()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-move-success-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-move-success-test-{unique}"));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(&source)?;
@@ -478,7 +479,8 @@ fn cancelling_staging_preserves_the_destination_and_cleans_the_partial_copy()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-replacement-cancel-test-{unique}"));
+    let root =
+        std::env::temp_dir().join(format!("beefilemanager-replacement-cancel-test-{unique}"));
     let source = root.join("source.txt");
     let target = root.join("target.txt");
     fs::create_dir_all(&root)?;
@@ -537,7 +539,8 @@ fn staged_file_replacement_commits_then_removes_a_moved_source() -> Result<(), B
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-replacement-success-test-{unique}"));
+    let root =
+        std::env::temp_dir().join(format!("beefilemanager-replacement-success-test-{unique}"));
     let source = root.join("source.txt");
     let target = root.join("target.txt");
     fs::create_dir_all(&root)?;
@@ -659,7 +662,9 @@ fn cancelled_replacement_move_tracks_the_modified_source_and_target_roots()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-replacement-move-cancel-test-{unique}"));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-replacement-move-cancel-test-{unique}"
+    ));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(source.join("new"))?;
@@ -708,7 +713,8 @@ fn each_transfer_item_keeps_its_own_conflict_decision() -> Result<(), Box<dyn Er
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-conflict-decisions-test-{unique}"));
+    let root =
+        std::env::temp_dir().join(format!("beefilemanager-conflict-decisions-test-{unique}"));
     let sources = root.join("sources");
     let destination = root.join("destination");
     fs::create_dir_all(&sources)?;
@@ -776,7 +782,9 @@ fn staged_directory_replacement_does_not_merge_old_contents() -> Result<(), Box<
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-directory-replacement-test-{unique}"));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-directory-replacement-test-{unique}"
+    ));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(source.join("new"))?;
@@ -809,7 +817,9 @@ fn replacing_a_directory_cleans_up_a_symlink_in_the_old_contents_without_followi
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-replace-symlink-cleanup-test-{unique}"));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-replace-symlink-cleanup-test-{unique}"
+    ));
     let source = root.join("source");
     let target = root.join("target");
     let outside = root.join("outside");
@@ -886,7 +896,10 @@ fn compression_stages(destination: &Path) -> Result<Vec<OsString>, Box<dyn Error
     Ok(fs::read_dir(destination)?
         .filter_map(Result::ok)
         .map(|entry| entry.file_name())
-        .filter(|name| name.to_string_lossy().starts_with(".strata-compression-"))
+        .filter(|name| {
+            name.to_string_lossy()
+                .starts_with(".beefilemanager-compression-")
+        })
         .collect())
 }
 
@@ -1221,7 +1234,7 @@ fn cancelling_between_deletions_reports_completed_and_unattempted_items()
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-delete-cancel-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-delete-cancel-test-{unique}"));
     let first = root.join("first.txt");
     let second = root.join("second.txt");
     fs::create_dir_all(&root)?;
@@ -1335,7 +1348,7 @@ fn cancelling_recursive_copy_removes_only_its_staging_output() -> Result<(), Box
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-copy-cancel-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-copy-cancel-test-{unique}"));
     let source = root.join("source");
     let target = root.join("target");
     fs::create_dir_all(source.join("nested"))?;
@@ -1352,7 +1365,12 @@ fn cancelling_recursive_copy_removes_only_its_staging_output() -> Result<(), Box
     loop {
         context.iteration(true);
         if fs::read_dir(&root)?.any(|entry| {
-            entry.is_ok_and(|entry| entry.file_name().to_string_lossy().starts_with(".strata-"))
+            entry.is_ok_and(|entry| {
+                entry
+                    .file_name()
+                    .to_string_lossy()
+                    .starts_with(".beefilemanager-")
+            })
         }) {
             break;
         }
@@ -1378,8 +1396,9 @@ fn permanent_delete_removes_a_symlink_standing_in_for_a_directory_without_follow
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let outside = std::env::temp_dir().join(format!("strata-delete-symlink-outside-{unique}"));
-    let decoy = std::env::temp_dir().join(format!("strata-delete-symlink-decoy-{unique}"));
+    let outside =
+        std::env::temp_dir().join(format!("beefilemanager-delete-symlink-outside-{unique}"));
+    let decoy = std::env::temp_dir().join(format!("beefilemanager-delete-symlink-decoy-{unique}"));
     fs::create_dir_all(&outside)?;
     let sentinel = outside.join("sentinel.txt");
     fs::write(&sentinel, b"do not delete me")?;
@@ -1427,8 +1446,11 @@ fn permanent_delete_does_not_follow_a_symlink_nested_inside_the_tree() -> Result
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-delete-nested-symlink-test-{unique}"));
-    let outside = std::env::temp_dir().join(format!("strata-delete-nested-outside-{unique}"));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-delete-nested-symlink-test-{unique}"
+    ));
+    let outside =
+        std::env::temp_dir().join(format!("beefilemanager-delete-nested-outside-{unique}"));
     let nested = root.join("nested");
     fs::create_dir_all(&nested)?;
     fs::create_dir_all(&outside)?;
@@ -1551,7 +1573,9 @@ fn cancelling_recursive_delete_leaves_the_unfinished_root_in_place() -> Result<(
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-recursive-delete-cancel-test-{unique}"));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-recursive-delete-cancel-test-{unique}"
+    ));
     let nested = root.join("nested");
     fs::create_dir_all(&nested)?;
     for index in 0..4 {
@@ -1611,7 +1635,7 @@ fn cancelling_between_moves_reports_completed_and_unattempted_sources() -> Resul
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-move-cancel-test-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-move-cancel-test-{unique}"));
     let sources = root.join("sources");
     let destination = root.join("destination");
     let first = sources.join("first.txt");
@@ -1740,7 +1764,7 @@ fn home_trash_fallback_finds_broken_symlinks_the_virtual_backend_has_not_refresh
     let unique = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)?
         .as_nanos();
-    let fixture = std::env::temp_dir().join(format!("strata-home-trash-fallback-{unique}"));
+    let fixture = std::env::temp_dir().join(format!("beefilemanager-home-trash-fallback-{unique}"));
     let trash = fixture.join("Trash");
     let original = fixture.join("original report.txt");
     fs::create_dir_all(trash.join("files"))?;

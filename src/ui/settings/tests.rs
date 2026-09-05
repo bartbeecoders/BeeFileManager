@@ -39,10 +39,10 @@ fn packaged() -> InstallSource {
     let managed: ManagedInstall = toml::from_str(
         r#"
         manager = "pacman"
-        package = "strata-bin"
+        package = "beefilemanager-bin"
         channel = "stable"
-        update_command = "yay -Syu strata-bin"
-        alternate_package = "strata-rc-bin"
+        update_command = "yay -Syu beefilemanager-bin"
+        alternate_package = "beefilemanager-rc-bin"
         "#,
     )
     .expect("the marker to parse");
@@ -53,7 +53,7 @@ fn available_release() -> UpdateCheck {
     UpdateCheck::Available {
         release: ReleaseMetadata {
             version: "0.8.0".to_owned(),
-            url: "https://github.com/lgse/strata/releases/tag/v0.8.0".to_owned(),
+            url: "https://github.com/bartbeecoders/BeeFileManager/releases/tag/v0.8.0".to_owned(),
             notes: String::new(),
             note_blocks: Vec::new(),
             kind: BuildKind::Stable,
@@ -61,7 +61,7 @@ fn available_release() -> UpdateCheck {
             published_at: None,
             commit: None,
         },
-        download_url: "https://example.invalid/strata.tar.gz".to_owned(),
+        download_url: "https://example.invalid/beefilemanager.tar.gz".to_owned(),
     }
 }
 
@@ -137,7 +137,7 @@ fn a_packaged_install_is_told_how_to_update_through_its_package_manager() {
     let message = update_check_message(&result, UpdateMethod::Aur);
     let markup = update_status_markup(message, &result, &packaged());
 
-    assert!(markup.ends_with("\nUpdate Strata with: yay -Syu strata-bin"));
+    assert!(markup.ends_with("\nUpdate BeeFileManager with: yay -Syu beefilemanager-bin"));
 }
 
 #[test]
@@ -168,10 +168,10 @@ fn the_managed_row_names_the_package_channel_and_commands() {
 
     assert_eq!(
         managed_install_summary(managed),
-        "Installed by pacman as strata-bin.\n\
+        "Installed by pacman as beefilemanager-bin.\n\
          Tracking the stable release channel.\n\
-         Update Strata with: yay -Syu strata-bin\n\
-         Other release channels are published as strata-rc-bin."
+         Update BeeFileManager with: yay -Syu beefilemanager-bin\n\
+         Other release channels are published as beefilemanager-rc-bin."
     );
 }
 
@@ -183,7 +183,7 @@ fn the_channel_selector_explains_a_packaged_channel_and_how_to_change_it() {
     assert_eq!(
         managed_channel_description(managed),
         "This install tracks the stable release channel. \
-         Other release channels are published as strata-rc-bin."
+         Other release channels are published as beefilemanager-rc-bin."
     );
 }
 
@@ -202,7 +202,7 @@ fn the_update_dialog_defers_to_the_package_manager() {
 
     assert_eq!(
         update_dialog_status(managed),
-        "Installed by pacman as strata-bin. Update Strata with: yay -Syu strata-bin"
+        "Installed by pacman as beefilemanager-bin. Update BeeFileManager with: yay -Syu beefilemanager-bin"
     );
 }
 
@@ -293,12 +293,12 @@ fn package_managed_status_identifies_omarchy() {
 
 #[test]
 fn aur_updates_open_in_the_configured_terminal() {
-    let command = aur_update_command("paru", "strata-bin");
+    let command = aur_update_command("paru", "beefilemanager-bin");
 
     assert_eq!(command.get_program(), "xdg-terminal-exec");
     assert_eq!(
         command.get_args().collect::<Vec<_>>(),
-        ["--", "paru", "-Syu", "strata-bin"]
+        ["--", "paru", "-Syu", "beefilemanager-bin"]
     );
 }
 

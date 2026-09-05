@@ -1,13 +1,13 @@
 [Desktop Entry]
 Type=Application
-Name=Strata
+Name=BeeFileManager
 GenericName=File Manager
 Comment=Navigate every layer
-Exec=strata %U
-Icon=io.github.lgse.Strata
+Exec=beefilemanager %U
+Icon=io.github.bartbeecoders.BeeFileManager
 Terminal=false
 Categories=Utility;FileTools;FileManager;
 MimeType=inode/directory;
 Keywords=files;folders;browser;explorer;manager;
 StartupNotify=true
-StartupWMClass=io.github.lgse.Strata
+StartupWMClass=io.github.bartbeecoders.BeeFileManager

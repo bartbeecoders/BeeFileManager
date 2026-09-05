@@ -1,6 +1,6 @@
 # Third-party notices
 
-Strata includes or derives assets from the following projects.
+BeeFileManager includes or derives assets from the following projects.
 
 ## JetBrains Mono
 
@@ -11,7 +11,7 @@ Strata includes or derives assets from the following projects.
 - Included asset: `data/fonts/JetBrainsMono[wght].ttf`
 - Full license: [`data/licenses/JetBrainsMono-OFL-1.1.txt`](data/licenses/JetBrainsMono-OFL-1.1.txt)
 
-The font is distributed unmodified. Strata materializes the embedded font in its private cache at runtime so it is available without changing the user's system font installation.
+The font is distributed unmodified. BeeFileManager materializes the embedded font in its private cache at runtime so it is available without changing the user's system font installation.
 
 ## Lucide
 
@@ -33,7 +33,7 @@ The SVGs retain Lucide geometry. Their foreground color was changed from `curren
 - Derived asset: `data/themes/catalog.toml`
 - Full license: [`data/licenses/Tinted-Theming-MIT.txt`](data/licenses/Tinted-Theming-MIT.txt)
 
-The bundled catalog contains curated Base16 palettes derived from this project alongside Strata's original themes. The Base16 mapping to Strata's semantic UI tokens is documented in the catalog.
+The bundled catalog contains curated Base16 palettes derived from this project alongside BeeFileManager's original themes. The Base16 mapping to BeeFileManager's semantic UI tokens is documented in the catalog.
 
 ## Rust dependencies
 

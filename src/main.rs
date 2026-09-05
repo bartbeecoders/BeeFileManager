@@ -19,7 +19,7 @@ use std::{os::unix::process::CommandExt, process::Stdio, time::Duration};
 
 use gtk::{gio, prelude::*};
 
-const APPLICATION_ID: &str = "io.github.lgse.Strata";
+const APPLICATION_ID: &str = "io.github.bartbeecoders.BeeFileManager";
 const GVFS_PROBE_ARGUMENT: &str = "--gvfs-probe";
 const GVFS_PROBE_TIMEOUT: Duration = Duration::from_secs(2);
 const GIO_FALLBACK_BACKENDS: [(&str, &str); 2] =
@@ -131,7 +131,7 @@ fn restart_with_local_vfs_if_gvfs_is_unresponsive() {
         .args(std::env::args_os().skip(1))
         .envs(GIO_FALLBACK_BACKENDS)
         .exec();
-    eprintln!("Unable to restart Strata with local filesystem and volume support: {error}");
+    eprintln!("Unable to restart BeeFileManager with local filesystem and volume support: {error}");
 }
 
 fn gvfs_probe_marker_path() -> Option<std::path::PathBuf> {
@@ -143,7 +143,7 @@ fn gvfs_probe_marker_path_in(runtime: Option<std::ffi::OsString>) -> Option<std:
     if runtime.is_empty() {
         return None;
     }
-    Some(std::path::Path::new(&runtime).join("strata-gvfs-probe-ok"))
+    Some(std::path::Path::new(&runtime).join("beefilemanager-gvfs-probe-ok"))
 }
 
 /// Kernel pids of `gvfsd*` processes, read from `/proc` to avoid a subprocess

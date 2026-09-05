@@ -33,7 +33,7 @@ fn wait_until(condition: impl Fn() -> bool) {
 
 #[test]
 fn alternate_view_search_finds_descendants_and_restores_the_original_view() {
-    const CHILD: &str = "STRATA_ALTERNATE_SEARCH_CHILD";
+    const CHILD: &str = "BEEFILEMANAGER_ALTERNATE_SEARCH_CHILD";
     if std::env::var_os(CHILD).is_none() {
         let status = std::process::Command::new(std::env::current_exe().expect("test executable"))
             .args(["--exact", "ui::inline_search::tests::alternate_view_search_finds_descendants_and_restores_the_original_view"])
@@ -48,10 +48,10 @@ fn alternate_view_search_finds_descendants_and_restores_the_original_view() {
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("clock")
         .as_nanos();
-    let fixture = std::env::temp_dir().join(format!("strata-alternate-search-{id}"));
+    let fixture = std::env::temp_dir().join(format!("beefilemanager-alternate-search-{id}"));
     let root = fixture.join("Documents");
-    fs::create_dir_all(root.join("github/strata")).expect("create nested directory");
-    fs::create_dir_all(fixture.join("outside-strata")).expect("create sibling directory");
+    fs::create_dir_all(root.join("github/beefilemanager")).expect("create nested directory");
+    fs::create_dir_all(fixture.join("outside-beefilemanager")).expect("create sibling directory");
     fs::write(root.join("github/readme.txt"), "fixture").expect("create second match");
     let browser = Browser::new(Rc::new(crate::adapters::LocalFileSource));
     let entry = gtk::Entry::new();
@@ -61,20 +61,24 @@ fn alternate_view_search_finds_descendants_and_restores_the_original_view() {
         .clone()
         .downcast::<gtk::Stack>()
         .expect("local search stack");
-    entry.set_text("stra");
-    wait_until(|| labels(&widget).contains(&root.join("github/strata").display().to_string()));
+    entry.set_text("beef");
+    wait_until(|| {
+        labels(&widget).contains(&root.join("github/beefilemanager").display().to_string())
+    });
     assert!(
         !labels(&widget)
             .iter()
-            .any(|text| text.contains("outside-strata"))
+            .any(|text| text.contains("outside-beefilemanager"))
     );
     entry.set_text("readme");
     wait_until(|| labels(&widget).contains(&root.join("github/readme.txt").display().to_string()));
     entry.set_text("");
     wait_until(|| stack.visible_child_name().as_deref() == Some("files"));
     assert_eq!(stack.visible_child(), Some(original.upcast()));
-    entry.set_text("stra");
-    wait_until(|| labels(&widget).contains(&root.join("github/strata").display().to_string()));
+    entry.set_text("beef");
+    wait_until(|| {
+        labels(&widget).contains(&root.join("github/beefilemanager").display().to_string())
+    });
     let controllers = entry.observe_controllers();
     let keys = (0..controllers.n_items())
         .filter_map(|index| controllers.item(index))
@@ -91,7 +95,7 @@ fn alternate_view_search_finds_descendants_and_restores_the_original_view() {
     ));
     assert_eq!(
         browser.active_location(),
-        Some(Location::local(root.join("github/strata")))
+        Some(Location::local(root.join("github/beefilemanager")))
     );
     entry.set_text("");
     wait_until(|| stack.visible_child_name().as_deref() == Some("files"));

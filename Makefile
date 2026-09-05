@@ -13,12 +13,12 @@ build:
 	cargo build --release
 
 install-local: build
-	install -Dm755 target/release/strata "$(BIN_DIR)/strata"
-	install -Dm644 data/icons/scalable/apps/io.github.lgse.Strata.svg \
-		"$(DATA_HOME)/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg"
+	install -Dm755 target/release/beefilemanager "$(BIN_DIR)/beefilemanager"
+	install -Dm644 data/icons/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg \
+		"$(DATA_HOME)/icons/hicolor/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg"
 	install -d "$(DATA_HOME)/applications"
-	sed 's|^Exec=strata |Exec=$(BIN_DIR)/strata |' data/io.github.lgse.Strata.desktop \
-		> "$(DATA_HOME)/applications/io.github.lgse.Strata.desktop"
+	sed 's|^Exec=beefilemanager |Exec=$(BIN_DIR)/beefilemanager |' data/io.github.bartbeecoders.BeeFileManager.desktop \
+		> "$(DATA_HOME)/applications/io.github.bartbeecoders.BeeFileManager.desktop"
 	update-desktop-database "$(DATA_HOME)/applications" 2>/dev/null || true
 	gtk-update-icon-cache -qtf "$(DATA_HOME)/icons/hicolor" 2>/dev/null || true
 
@@ -26,21 +26,21 @@ install-file-manager: build
 	install -d "$(DATA_HOME)/dbus-1/services"
 	@conflict="$$(grep -l '^Name=org\.freedesktop\.FileManager1$$' \
 		"$(DATA_HOME)"/dbus-1/services/*.service 2>/dev/null | \
-		grep -v '/io.github.lgse.Strata.FileManager1.service$$' | head -n 1)"; \
+		grep -v '/io.github.bartbeecoders.BeeFileManager.FileManager1.service$$' | head -n 1)"; \
 	if [ -n "$$conflict" ]; then \
 		echo "Refusing to override the per-user FileManager1 provider: $$conflict" >&2; \
 		exit 1; \
 	fi
-	sed 's|^Exec=/usr/bin/strata |Exec=$(BIN_DIR)/strata |' \
-		data/io.github.lgse.Strata.FileManager1.service \
-		> "$(DATA_HOME)/dbus-1/services/io.github.lgse.Strata.FileManager1.service"
+	sed 's|^Exec=/usr/bin/beefilemanager |Exec=$(BIN_DIR)/beefilemanager |' \
+		data/io.github.bartbeecoders.BeeFileManager.FileManager1.service \
+		> "$(DATA_HOME)/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service"
 
 uninstall-file-manager:
-	rm -f "$(DATA_HOME)/dbus-1/services/io.github.lgse.Strata.FileManager1.service"
+	rm -f "$(DATA_HOME)/dbus-1/services/io.github.bartbeecoders.BeeFileManager.FileManager1.service"
 
 uninstall-local: uninstall-file-manager
-	rm -f "$(BIN_DIR)/strata" \
-		"$(DATA_HOME)/applications/io.github.lgse.Strata.desktop" \
-		"$(DATA_HOME)/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg"
+	rm -f "$(BIN_DIR)/beefilemanager" \
+		"$(DATA_HOME)/applications/io.github.bartbeecoders.BeeFileManager.desktop" \
+		"$(DATA_HOME)/icons/hicolor/scalable/apps/io.github.bartbeecoders.BeeFileManager.svg"
 	update-desktop-database "$(DATA_HOME)/applications" 2>/dev/null || true
 	gtk-update-icon-cache -qtf "$(DATA_HOME)/icons/hicolor" 2>/dev/null || true

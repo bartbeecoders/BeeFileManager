@@ -688,7 +688,7 @@ enum StagedSibling {
 impl StagedSibling {
     fn create(parent: &Path, directory: bool) -> io::Result<Self> {
         let mut builder = tempfile::Builder::new();
-        builder.prefix(".strata-replacement-");
+        builder.prefix(".beefilemanager-replacement-");
         if directory {
             builder.tempdir_in(parent).map(Self::Directory)
         } else {
@@ -1285,7 +1285,7 @@ where
     };
     let mut builder = tempfile::Builder::new();
     builder
-        .prefix(".strata-compression-")
+        .prefix(".beefilemanager-compression-")
         .permissions(std::fs::Permissions::from_mode(0o666));
     let staged = builder
         .tempfile_in(destination)

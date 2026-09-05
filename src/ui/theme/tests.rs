@@ -115,7 +115,7 @@ fn colors_can_be_blended_into_semantic_tokens() {
 }
 
 #[test]
-fn quattro_colors_map_to_strata_tokens() {
+fn quattro_colors_map_to_beefilemanager_tokens() {
     let theme = tokens_from_quattro(
         "azure-glow",
         r##"

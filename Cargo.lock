@@ -41,6 +41,37 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ac07cdecf99051d9a5238b80f35af32cdeba5b336e55d957b318b50137e18da5"
 
 [[package]]
+name = "beefilemanager"
+version = "0.10.0"
+dependencies = [
+ "cairo-rs",
+ "flate2",
+ "gdk-pixbuf",
+ "gio",
+ "glib",
+ "glib-build-tools",
+ "gtk4",
+ "ignore",
+ "pangocairo",
+ "poppler-rs",
+ "pulldown-cmark",
+ "rustix",
+ "serde",
+ "serde_json",
+ "sevenz-rust2",
+ "sourceview5",
+ "tar",
+ "tempfile",
+ "toml",
+ "tracing",
+ "tracing-subscriber",
+ "ureq",
+ "yeslogic-fontconfig-sys",
+ "zip",
+ "zstd",
+]
+
+[[package]]
 name = "bitflags"
 version = "2.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1520,37 +1551,6 @@ name = "stable_deref_trait"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
-
-[[package]]
-name = "strata"
-version = "0.10.0"
-dependencies = [
- "cairo-rs",
- "flate2",
- "gdk-pixbuf",
- "gio",
- "glib",
- "glib-build-tools",
- "gtk4",
- "ignore",
- "pangocairo",
- "poppler-rs",
- "pulldown-cmark",
- "rustix",
- "serde",
- "serde_json",
- "sevenz-rust2",
- "sourceview5",
- "tar",
- "tempfile",
- "toml",
- "tracing",
- "tracing-subscriber",
- "ureq",
- "yeslogic-fontconfig-sys",
- "zip",
- "zstd",
-]
 
 [[package]]
 name = "subtle"

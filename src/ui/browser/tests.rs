@@ -622,7 +622,10 @@ fn trash_locations_include_the_root_and_descendants() {
 #[test]
 fn transfer_collisions_detect_existing_destination_items() -> Result<(), Box<dyn std::error::Error>>
 {
-    let root = std::env::temp_dir().join(format!("strata-collision-test-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-collision-test-{}",
+        std::process::id()
+    ));
     let _ignored = std::fs::remove_dir_all(&root);
     let source_dir = root.join("source");
     let destination = root.join("destination");
@@ -704,7 +707,10 @@ fn destination_paths_expand_home_and_relative_input() {
 
 #[test]
 fn path_suggestions_list_only_matching_folders() -> Result<(), Box<dyn std::error::Error>> {
-    let root = std::env::temp_dir().join(format!("strata-path-suggestions-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!(
+        "beefilemanager-path-suggestions-{}",
+        std::process::id()
+    ));
     let _ignored = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(root.join("Documents"))?;
     std::fs::create_dir_all(root.join("Downloads"))?;
@@ -982,7 +988,7 @@ fn unique_fixture_root(label: &str) -> std::path::PathBuf {
         .duration_since(std::time::UNIX_EPOCH)
         .expect("the system clock should be after the Unix epoch")
         .as_nanos();
-    std::env::temp_dir().join(format!("strata-trash-{label}-{unique}"))
+    std::env::temp_dir().join(format!("beefilemanager-trash-{label}-{unique}"))
 }
 
 #[test]
@@ -1627,7 +1633,7 @@ fn filter_change_for_classifies_tightening_and_loosening() {
     assert_eq!(filter_change_for("ab", "ac"), gtk::FilterChange::Different);
 }
 
-const FILTER_QUERY_GTK_CHILD: &str = "STRATA_FILTER_QUERY_GTK_CHILD";
+const FILTER_QUERY_GTK_CHILD: &str = "BEEFILEMANAGER_FILTER_QUERY_GTK_CHILD";
 const FILTER_QUERY_TEST: &str =
     "ui::browser::tests::notify_filter_query_skips_unchanged_folded_text";
 
@@ -1673,7 +1679,7 @@ fn notify_filter_query_skips_unchanged_folded_text() {
 
 #[test]
 fn seeded_filter_keeps_first_character_when_typing_continues() {
-    const CHILD: &str = "STRATA_SEEDED_FILTER_GTK_CHILD";
+    const CHILD: &str = "BEEFILEMANAGER_SEEDED_FILTER_GTK_CHILD";
     if std::env::var_os(CHILD).is_none() {
         let status = std::process::Command::new(
             std::env::current_exe().expect("test executable should exist"),
@@ -1713,7 +1719,7 @@ fn seeded_filter_keeps_first_character_when_typing_continues() {
     window.destroy();
 }
 
-const SCROLL_PIN_GTK_CHILD: &str = "STRATA_SCROLL_PIN_GTK_CHILD";
+const SCROLL_PIN_GTK_CHILD: &str = "BEEFILEMANAGER_SCROLL_PIN_GTK_CHILD";
 const SCROLL_PIN_TEST: &str =
     "ui::browser::tests::waiting_to_scroll_does_not_pin_an_unallocated_view";
 

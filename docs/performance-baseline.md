@@ -1,6 +1,6 @@
 # Performance Baseline
 
-This document defines the reproducible local performance check for Strata. Results are machine-specific and should be compared against earlier runs on the same system rather than treated as universal benchmarks.
+This document defines the reproducible local performance check for BeeFileManager. Results are machine-specific and should be compared against earlier runs on the same system rather than treated as universal benchmarks.
 
 ## Fixtures
 
@@ -18,15 +18,15 @@ Build once so compilation is excluded from startup measurements:
 
 ```bash
 cargo build --release
-RUST_LOG=strata=debug target/release/strata target/fixtures/100000
+RUST_LOG=beefilemanager=debug target/release/beefilemanager target/fixtures/100000
 ```
 
 Default logs contain request IDs, backend names, counts, and timings without browsed locations.
-`RUST_LOG=strata=debug` explicitly enables diagnostic logging and may include full native paths.
+`RUST_LOG=beefilemanager=debug` explicitly enables diagnostic logging and may include full native paths.
 Remote URI user-info, authentication parameters, queries, and fragments remain redacted at every
 level. Review diagnostic logs before sharing them.
 
-Strata accepts a startup directory on the command line. Structured logs report:
+BeeFileManager accepts a startup directory on the command line. Structured logs report:
 
 - Time until the application window is presented
 - First provider batch latency
@@ -38,11 +38,11 @@ Strata accepts a startup directory on the command line. Structured logs report:
 Capture sampled RSS and proportional set size (PSS) with:
 
 ```bash
-STRATA_BINARY=target/release/strata \
+BEEFILEMANAGER_BINARY=target/release/beefilemanager \
   ./scripts/profile-fixture.sh target/fixtures/100000
 ```
 
-Close other Strata instances before profiling so GApplication does not forward the request to an existing process. PSS is included because RSS charges each process for shared GTK, graphics, and font pages in full.
+Close other BeeFileManager instances before profiling so GApplication does not forward the request to an existing process. PSS is included because RSS charges each process for shared GTK, graphics, and font pages in full.
 
 ## Initial baseline — 2026-08-29
 

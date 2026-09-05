@@ -21,7 +21,7 @@ mod imp {
 
     #[glib::object_subclass]
     impl ObjectSubclass for EntryListModel {
-        const NAME: &'static str = "StrataEntryListModel";
+        const NAME: &'static str = "BeeFileManagerEntryListModel";
         type Type = super::EntryListModel;
         type Interfaces = (gio::ListModel,);
     }

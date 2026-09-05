@@ -533,7 +533,7 @@ fn moving_between_parent_and_child_columns_restores_their_selections() {
     assert!(state.select(0, 0));
     assert!(state.descend(0, location("/home/projects"), RequestId(2)));
     state.select_first_on_load(1);
-    state.apply_batch(RequestId(2), vec![entry("/home/projects/strata")]);
+    state.apply_batch(RequestId(2), vec![entry("/home/projects/beefilemanager")]);
 
     assert_eq!(state.focus_parent(), Some((0, Some(0))));
     let (depth, position, focused) = state.focused_entry().expect("parent entry remains focused");
@@ -543,7 +543,7 @@ fn moving_between_parent_and_child_columns_restores_their_selections() {
     assert_eq!(state.focus_child(), Some((1, Some(0))));
     let (depth, position, focused) = state.focused_entry().expect("child entry remains focused");
     assert_eq!((depth, position), (1, 0));
-    assert_eq!(focused.location, location("/home/projects/strata"));
+    assert_eq!(focused.location, location("/home/projects/beefilemanager"));
     assert_eq!(state.focus_child(), None);
 }
 
@@ -567,9 +567,9 @@ fn closing_a_middle_column_removes_it_and_its_descendants() {
     state.apply_batch(RequestId(1), vec![entry("/home/projects")]);
     assert!(state.select(0, 0));
     assert!(state.descend(0, location("/home/projects"), RequestId(2)));
-    state.apply_batch(RequestId(2), vec![entry("/home/projects/strata")]);
+    state.apply_batch(RequestId(2), vec![entry("/home/projects/beefilemanager")]);
     assert!(state.select(1, 0));
-    assert!(state.descend(1, location("/home/projects/strata"), RequestId(3)));
+    assert!(state.descend(1, location("/home/projects/beefilemanager"), RequestId(3)));
 
     assert_eq!(state.close_from(1), Some((0, Some(0))));
     assert_eq!(state.columns.len(), 1);

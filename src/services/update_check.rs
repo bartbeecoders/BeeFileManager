@@ -17,9 +17,9 @@ use super::update_install::{
     UpdateMethod, aur_repository_version, omarchy_repository_version, package_repository_version,
 };
 
-const API_ROOT: &str = "https://api.github.com/repos/lgse/strata/releases";
-const COMMITS_ROOT: &str = "https://api.github.com/repos/lgse/strata/commits";
-const RELEASES_URL: &str = "https://github.com/lgse/strata/releases";
+const API_ROOT: &str = "https://api.github.com/repos/bartbeecoders/BeeFileManager/releases";
+const COMMITS_ROOT: &str = "https://api.github.com/repos/bartbeecoders/BeeFileManager/commits";
+const RELEASES_URL: &str = "https://github.com/bartbeecoders/BeeFileManager/releases";
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(10);
 /// Minimum interval between automatic checks against the same channel.
 const CHECK_INTERVAL: Duration = Duration::from_secs(6 * 60 * 60);
@@ -108,7 +108,7 @@ struct ReleaseAsset {
 /// The asset naming convention published by `.github/workflows/release.yml`.
 fn archive_name(version: &str) -> String {
     format!(
-        "strata-{version}-{}-unknown-linux-gnu.tar.gz",
+        "beefilemanager-{version}-{}-unknown-linux-gnu.tar.gz",
         std::env::consts::ARCH
     )
 }
@@ -125,7 +125,7 @@ fn request_json<T: serde::de::DeserializeOwned>(url: &str) -> Result<T, ureq::Er
         .get(url)
         .header("Accept", "application/vnd.github+json")
         .header("X-GitHub-Api-Version", "2022-11-28")
-        .header("User-Agent", "strata-file-manager")
+        .header("User-Agent", "beefilemanager-file-manager")
         .call()
         .and_then(|mut response| response.body_mut().read_json::<T>())
 }
@@ -245,7 +245,7 @@ fn resolve_commit(release: &mut ReleaseMetadata) {
 }
 
 fn cache_dir() -> PathBuf {
-    glib::user_cache_dir().join("strata")
+    glib::user_cache_dir().join("beefilemanager")
 }
 
 fn update_check_cache_path() -> PathBuf {
@@ -350,7 +350,7 @@ fn request_json_conditional<T: serde::de::DeserializeOwned>(
         .get(url)
         .header("Accept", "application/vnd.github+json")
         .header("X-GitHub-Api-Version", "2022-11-28")
-        .header("User-Agent", "strata-file-manager");
+        .header("User-Agent", "beefilemanager-file-manager");
     if let Some(etag) = etag {
         request = request.header("If-None-Match", etag);
     }
@@ -841,7 +841,7 @@ pub fn check_for_updates(
 ) -> Receiver<UpdateCheck> {
     let (sender, receiver) = mpsc::channel();
     let spawned = std::thread::Builder::new()
-        .name("strata-update-check".into())
+        .name("beefilemanager-update-check".into())
         .spawn(move || {
             let result = match update_method {
                 UpdateMethod::InPlace => fetch_update(channel, &installed, force),
@@ -864,7 +864,7 @@ pub fn check_for_updates(
 pub fn fetch_release_notes(tag: &'static str) -> Receiver<ReleaseNotes> {
     let (sender, receiver) = mpsc::channel();
     let spawned = std::thread::Builder::new()
-        .name("strata-release-notes".into())
+        .name("beefilemanager-release-notes".into())
         .spawn(move || {
             let _sent = sender.send(fetch_exact_release(tag));
         });

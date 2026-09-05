@@ -4,7 +4,7 @@ use std::{process::Command, rc::Rc};
 
 use super::*;
 
-const GTK_CHILD: &str = "STRATA_MARQUEE_GTK_CHILD";
+const GTK_CHILD: &str = "BEEFILEMANAGER_MARQUEE_GTK_CHILD";
 const PIN_TEST: &str = "ui::marquee::tests::marquee_does_not_pin_the_collection_view";
 
 #[test]

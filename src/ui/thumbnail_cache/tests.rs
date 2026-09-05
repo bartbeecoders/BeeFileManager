@@ -32,7 +32,7 @@ impl BucketGuard {
             .expect("the system clock should be after the Unix epoch")
             .as_nanos();
         let bucket = std::env::temp_dir().join(format!(
-            "strata-thumb-cache-{label}-{unique}-{}",
+            "beefilemanager-thumb-cache-{label}-{unique}-{}",
             std::process::id()
         ));
         let bucket = bucket.join("thumbnails").join("large");
@@ -67,7 +67,7 @@ fn unique_source(label: &str) -> PathBuf {
         .expect("the system clock should be after the Unix epoch")
         .as_nanos();
     let dir = std::env::temp_dir().join(format!(
-        "strata-thumb-source-{label}-{unique}-{}",
+        "beefilemanager-thumb-source-{label}-{unique}-{}",
         std::process::id()
     ));
     std::fs::create_dir_all(&dir).expect("the source dir should exist");
@@ -324,5 +324,5 @@ fn uri_keys_cover_tricky_names() {
 fn normalizer_rejects_degenerate_renders() {
     assert!(normalize_to_canonical(b"", "file:///x.jpg", 1).is_err());
     assert!(normalize_to_canonical(b"not a png", "file:///x.jpg", 1).is_err());
-    assert!(ensure_cache_dir(&PathBuf::from("/proc/strata-nope/thumbnails")).is_err());
+    assert!(ensure_cache_dir(&PathBuf::from("/proc/beefilemanager-nope/thumbnails")).is_err());
 }

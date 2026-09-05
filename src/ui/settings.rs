@@ -98,7 +98,7 @@ pub(super) fn resolve_update_method_async(callback: impl FnOnce(UpdateMethod) + 
     }
     let (sender, receiver) = std::sync::mpsc::channel();
     let spawned = std::thread::Builder::new()
-        .name("strata-update-method".into())
+        .name("beefilemanager-update-method".into())
         .spawn(move || {
             let method = *UPDATE_METHOD_CACHE.get_or_init(services::update_method);
             let _sent = sender.send(method);
@@ -212,7 +212,7 @@ mod responsive_bin {
 
     #[glib::object_subclass]
     impl ObjectSubclass for ResponsiveBin {
-        const NAME: &'static str = "StrataSettingsResponsiveBin";
+        const NAME: &'static str = "BeeFileManagerSettingsResponsiveBin";
         type Type = super::ResponsiveBin;
         type ParentType = gtk::Widget;
     }
@@ -662,7 +662,7 @@ fn general_page(
     let direct_open_enabled = manager.search_open_files_directly();
     let (search_open_row, search_open_files) = settings_option(
         "Open search results directly",
-        "Launch files from search instead of opening Strata's quick preview.",
+        "Launch files from search instead of opening BeeFileManager's quick preview.",
         direct_open_enabled,
     );
     let manager_for_search_open = manager.clone();
@@ -831,13 +831,15 @@ fn updates_page(
     let (auto_check_row, auto_check) = settings_option(
         "Automatically check for updates",
         match update_method {
-            UpdateMethod::InPlace => "Check GitHub for a newer release when Strata starts.",
-            UpdateMethod::Aur => "Check the AUR for a newer packaged release when Strata starts.",
+            UpdateMethod::InPlace => "Check GitHub for a newer release when BeeFileManager starts.",
+            UpdateMethod::Aur => {
+                "Check the AUR for a newer packaged release when BeeFileManager starts."
+            }
             UpdateMethod::Omarchy => {
-                "Check the Omarchy package repository for a newer release when Strata starts."
+                "Check the Omarchy package repository for a newer release when BeeFileManager starts."
             }
             UpdateMethod::Pacman => {
-                "Check the configured package repositories for a newer release when Strata starts."
+                "Check the configured package repositories for a newer release when BeeFileManager starts."
             }
         },
         auto_check_enabled,
@@ -1071,8 +1073,10 @@ fn release_notes_card(title: &str, initial: &str) -> ReleaseNotesCard {
     badge.set_visible(false);
     let notes = gtk::Box::new(gtk::Orientation::Vertical, 6);
     set_release_notes_message(&notes, initial);
-    let fallback =
-        gtk::LinkButton::with_label("https://github.com/lgse/strata/releases", "View on GitHub");
+    let fallback = gtk::LinkButton::with_label(
+        "https://github.com/bartbeecoders/BeeFileManager/releases",
+        "View on GitHub",
+    );
     fallback.add_css_class("release-notes-fallback");
     fallback.set_halign(gtk::Align::Start);
     fallback.set_visible(false);
@@ -1450,7 +1454,7 @@ fn update_check_row(
                     Err(TryRecvError::Empty) => glib::ControlFlow::Continue,
                     Err(TryRecvError::Disconnected) => {
                         status.set_markup(
-                            "Couldn't check for updates · <a href=\"https://github.com/lgse/strata/releases/latest\">View releases on GitHub</a>",
+                            "Couldn't check for updates · <a href=\"https://github.com/bartbeecoders/BeeFileManager/releases/latest\">View releases on GitHub</a>",
                         );
                         available_notes.container.set_visible(false);
                         button.set_sensitive(true);
@@ -1742,13 +1746,13 @@ fn restart(application: Option<&gtk::Application>) {
     // old GApplication instance, that exposed a Foot/libxkbcommon crash on
     // affected systems. Detach the waiter from inherited terminal streams and
     // put it in its own process group so applying an update cannot disturb the
-    // terminal that launched Strata.
+    // terminal that launched BeeFileManager.
     let parent_pid = std::process::id().to_string();
     if std::process::Command::new("sh")
         .args([
             "-c",
             "while kill -0 \"$1\" 2>/dev/null; do sleep 0.1; done; sleep 0.5; exec \"$2\"",
-            "strata-restart",
+            "beefilemanager-restart",
         ])
         .arg(parent_pid)
         .arg(current_exe)
@@ -1785,7 +1789,7 @@ pub(super) fn show_update_dialog(
     let aur_action = aur_update_action_label();
     let layout = modal_layout(
         icons::DOWNLOADS,
-        &format!("Strata v{} is available", release.version),
+        &format!("BeeFileManager v{} is available", release.version),
         &format!(
             "Installed v{}  →  Available v{}",
             crate::build_info::installed_version(),
@@ -2258,7 +2262,7 @@ fn update_check_message(result: &UpdateCheck, update_method: UpdateMethod) -> St
             )
         }
         UpdateCheck::Failed(message) => format!(
-            "Couldn't check for updates: {} · <a href=\"https://github.com/lgse/strata/releases/latest\">View releases on GitHub</a>",
+            "Couldn't check for updates: {} · <a href=\"https://github.com/bartbeecoders/BeeFileManager/releases/latest\">View releases on GitHub</a>",
             glib::markup_escape_text(message)
         ),
     }
@@ -2313,7 +2317,7 @@ fn about_page() -> gtk::Widget {
     identity.add_css_class("about-identity");
     identity.set_halign(gtk::Align::Center);
 
-    let name = gtk::Label::new(Some("Strata"));
+    let name = gtk::Label::new(Some("BeeFileManager"));
     name.add_css_class("about-name");
     let description = gtk::Label::new(Some(crate::build_info::DESCRIPTION));
     description.add_css_class("about-description");
@@ -2342,7 +2346,7 @@ fn about_page() -> gtk::Widget {
 
     let repository = gtk::LinkButton::builder()
         .uri(crate::build_info::REPOSITORY)
-        .tooltip_text("Open the Strata repository")
+        .tooltip_text("Open the BeeFileManager repository")
         .build();
     repository.add_css_class("about-repository");
     let repository_content = gtk::Box::new(gtk::Orientation::Horizontal, 8);

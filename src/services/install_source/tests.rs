@@ -7,10 +7,10 @@ use crate::services::Channel;
 
 const PACKAGED_MARKER: &str = r#"
 manager = "pacman"
-package = "strata-bin"
+package = "beefilemanager-bin"
 channel = "stable"
 aur_helpers = ["yay", "paru", "pikaur", "trizen"]
-alternate_package = "strata-rc-bin"
+alternate_package = "beefilemanager-rc-bin"
 "#;
 
 fn marker(contents: &str) -> (tempfile::TempDir, PathBuf) {
@@ -32,12 +32,12 @@ fn a_missing_marker_means_a_user_owned_install() {
         InstallSource::SelfManaged
     );
     assert!(
-        !Path::new("/nonexistent/bin/strata").is_file(),
+        !Path::new("/nonexistent/bin/beefilemanager").is_file(),
         "the prefix used below must not exist"
     );
     assert_eq!(
         InstallSource::from_marker_path(
-            marker_path_for_executable(Path::new("/nonexistent/bin/strata"))
+            marker_path_for_executable(Path::new("/nonexistent/bin/beefilemanager"))
                 .filter(|path| path.is_file())
         ),
         InstallSource::SelfManaged
@@ -50,16 +50,16 @@ fn a_populated_marker_describes_the_owning_package() {
 
     let managed = source.managed().expect("a managed install");
     assert_eq!(managed.manager(), "pacman");
-    assert_eq!(managed.package(), Some("strata-bin"));
+    assert_eq!(managed.package(), Some("beefilemanager-bin"));
     assert_eq!(managed.channel(), Some("stable"));
-    assert_eq!(managed.alternate_package(), Some("strata-rc-bin"));
+    assert_eq!(managed.alternate_package(), Some("beefilemanager-rc-bin"));
     assert_eq!(
         managed.ownership_summary(),
-        "Installed by pacman as strata-bin."
+        "Installed by pacman as beefilemanager-bin."
     );
     assert_eq!(
         managed.alternate_instruction().as_deref(),
-        Some("Other release channels are published as strata-rc-bin.")
+        Some("Other release channels are published as beefilemanager-rc-bin.")
     );
 }
 
@@ -72,7 +72,7 @@ fn the_update_command_names_an_installed_aur_helper() {
 
     assert_eq!(
         managed.update_instruction_with(|helper| helper == "paru"),
-        "Update Strata with: paru -Syu strata-bin",
+        "Update BeeFileManager with: paru -Syu beefilemanager-bin",
         "the first listed helper that is present wins, not the first listed"
     );
 }
@@ -86,7 +86,7 @@ fn the_aur_update_target_uses_an_installed_helper_and_package() {
 
     assert_eq!(
         managed.aur_update_target_with(|helper| helper == "paru"),
-        Some(("paru", "strata-bin"))
+        Some(("paru", "beefilemanager-bin"))
     );
     assert_eq!(managed.aur_update_target_with(|_| false), None);
 }
@@ -100,7 +100,7 @@ fn the_update_command_falls_back_when_no_helper_is_installed() {
 
     assert_eq!(
         managed.update_instruction_with(|_| false),
-        "Update Strata with an AUR helper, for example: yay -Syu strata-bin"
+        "Update BeeFileManager with an AUR helper, for example: yay -Syu beefilemanager-bin"
     );
 }
 
@@ -109,8 +109,8 @@ fn an_explicit_update_command_wins_over_helper_detection() {
     let managed = load(
         r#"
         manager = "apt"
-        package = "strata"
-        update_command = "sudo apt install --only-upgrade strata"
+        package = "beefilemanager"
+        update_command = "sudo apt install --only-upgrade beefilemanager"
         aur_helpers = ["yay"]
         "#,
     )
@@ -120,7 +120,7 @@ fn an_explicit_update_command_wins_over_helper_detection() {
 
     assert_eq!(
         managed.update_instruction_with(|_| true),
-        "Update Strata with: sudo apt install --only-upgrade strata"
+        "Update BeeFileManager with: sudo apt install --only-upgrade beefilemanager"
     );
 }
 
@@ -174,7 +174,7 @@ fn unknown_keys_do_not_break_an_older_binary() {
     let source = load(
         r#"
         manager = "pacman"
-        packaged_by_a_newer_strata = "some value"
+        packaged_by_a_newer_beefilemanager = "some value"
         "#,
     );
 
@@ -196,7 +196,7 @@ fn an_empty_marker_falls_back_to_generic_guidance() {
     );
     assert_eq!(
         managed.update_instruction(),
-        "Update Strata through your package manager."
+        "Update BeeFileManager through your package manager."
     );
     assert_eq!(managed.alternate_instruction(), None);
 }
@@ -218,7 +218,7 @@ fn blank_values_are_treated_as_absent() {
     assert_eq!(managed.alternate_instruction(), None);
     assert_eq!(
         managed.update_instruction_with(|_| true),
-        "Update Strata through your package manager.",
+        "Update BeeFileManager through your package manager.",
         "a blank helper must not render an update command"
     );
 }
@@ -226,16 +226,21 @@ fn blank_values_are_treated_as_absent() {
 #[test]
 fn the_marker_is_resolved_relative_to_the_install_prefix() {
     assert_eq!(
-        marker_path_for_executable(Path::new("/usr/bin/strata")),
-        Some(PathBuf::from("/usr/share/strata/install-source.toml"))
-    );
-    assert_eq!(
-        marker_path_for_executable(Path::new("/opt/strata/bin/strata")),
+        marker_path_for_executable(Path::new("/usr/bin/beefilemanager")),
         Some(PathBuf::from(
-            "/opt/strata/share/strata/install-source.toml"
+            "/usr/share/beefilemanager/install-source.toml"
         ))
     );
-    assert_eq!(marker_path_for_executable(Path::new("strata")), None);
+    assert_eq!(
+        marker_path_for_executable(Path::new("/opt/beefilemanager/bin/beefilemanager")),
+        Some(PathBuf::from(
+            "/opt/beefilemanager/share/beefilemanager/install-source.toml"
+        ))
+    );
+    assert_eq!(
+        marker_path_for_executable(Path::new("beefilemanager")),
+        None
+    );
 }
 
 #[test]
@@ -248,15 +253,15 @@ fn a_packaged_install_refuses_to_replace_its_own_binary() {
     let source = load(
         r#"
         manager = "pacman"
-        package = "strata-bin"
-        update_command = "yay -Syu strata-bin"
+        package = "beefilemanager-bin"
+        update_command = "yay -Syu beefilemanager-bin"
         "#,
     );
 
     assert_eq!(
         ensure_self_managed(&source),
         Err(
-            "Installed by pacman as strata-bin. Update Strata with: yay -Syu strata-bin".to_owned()
+            "Installed by pacman as beefilemanager-bin. Update BeeFileManager with: yay -Syu beefilemanager-bin".to_owned()
         )
     );
 }

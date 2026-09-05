@@ -3,7 +3,7 @@
 //! `org.freedesktop.FileManager1`, the interface browsers and GTK/GNOME apps
 //! call for "Open file location". Those callers talk to the well-known bus
 //! name directly instead of going through `xdg-open` and `mimeapps.list`, so
-//! without this Strata is skipped even when it owns `inode/directory`.
+//! without this BeeFileManager is skipped even when it owns `inode/directory`.
 
 use gtk::{gio, glib, prelude::*};
 

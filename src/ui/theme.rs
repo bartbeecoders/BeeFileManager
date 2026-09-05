@@ -1078,7 +1078,7 @@ fn validate_tokens(tokens: &ThemeTokens) -> Result<(), &'static str> {
 }
 
 fn source_style_scheme() -> Option<sourceview5::StyleScheme> {
-    sourceview5::StyleSchemeManager::default().scheme("strata-current")
+    sourceview5::StyleSchemeManager::default().scheme("beefilemanager-current")
 }
 
 pub(super) fn register_source_buffer(buffer: &sourceview5::Buffer) {
@@ -1116,10 +1116,15 @@ fn ensure_source_style_scheme_installed() {
     let Some(tokens) = pending else {
         return;
     };
-    let directory = glib::user_cache_dir().join("strata").join("source-styles");
+    let directory = glib::user_cache_dir()
+        .join("beefilemanager")
+        .join("source-styles");
     if let Err(error) = fs::create_dir_all(&directory).and_then(|()| {
         let value = source_style_scheme_xml(&tokens);
-        crate::storage::atomic_write(&directory.join("strata-current.xml"), value.as_bytes())
+        crate::storage::atomic_write(
+            &directory.join("beefilemanager-current.xml"),
+            value.as_bytes(),
+        )
     }) {
         tracing::warn!(%error, "unable to write preview syntax style");
         return;
@@ -1133,7 +1138,7 @@ fn ensure_source_style_scheme_installed() {
     });
     manager.force_rescan();
     STYLE_SCHEME_DIRTY.with(|dirty| dirty.set(false));
-    let scheme = manager.scheme("strata-current");
+    let scheme = manager.scheme("beefilemanager-current");
     SOURCE_BUFFERS.with(|buffers| {
         buffers.borrow_mut().retain(|buffer| {
             let Some(buffer) = buffer.upgrade() else {
@@ -1151,7 +1156,7 @@ fn source_style_scheme_xml(tokens: &ThemeTokens) -> String {
     let type_color = blend(&tokens.accent, &tokens.text, 0.24);
     format!(
         r#"<?xml version="1.0" encoding="UTF-8"?>
-<style-scheme id="strata-current" _name="Strata Current Theme" version="1.0">
+<style-scheme id="beefilemanager-current" _name="BeeFileManager Current Theme" version="1.0">
   <color name="background" value="{}"/>
   <color name="surface" value="{}"/>
   <color name="text" value="{}"/>
@@ -1251,7 +1256,7 @@ fn title_case_slug(slug: &str) -> String {
 }
 
 fn config_directory() -> PathBuf {
-    gtk::glib::user_config_dir().join("strata")
+    gtk::glib::user_config_dir().join("beefilemanager")
 }
 fn settings_path() -> PathBuf {
     config_directory().join("settings.toml")

@@ -9,7 +9,7 @@ use std::{
 use super::EntryListModel;
 use gtk::{gio, prelude::*};
 
-const GTK_CHILD: &str = "STRATA_ENTRY_LIST_MODEL_GTK_CHILD";
+const GTK_CHILD: &str = "BEEFILEMANAGER_ENTRY_LIST_MODEL_GTK_CHILD";
 const TEST_NAME: &str = "ui::entry_list_model::tests::lazy_model_counts_items_splices_and_types";
 
 fn values_model(count: u32) -> (EntryListModel, Rc<Cell<u32>>) {

@@ -9,7 +9,7 @@ use super::{
 
 fn fake_proc(label: &str, processes: &[(&str, &str)]) -> std::path::PathBuf {
     let root = std::env::temp_dir().join(format!(
-        "strata-gvfs-proc-{label}-{}-{}",
+        "beefilemanager-gvfs-proc-{label}-{}-{}",
         std::process::id(),
         std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
@@ -52,7 +52,7 @@ fn daemon_restart_changes_the_identity() {
 
 #[test]
 fn missing_proc_root_is_an_empty_identity() {
-    let missing = std::env::temp_dir().join("strata-gvfs-proc-definitely-missing");
+    let missing = std::env::temp_dir().join("beefilemanager-gvfs-proc-definitely-missing");
     assert_eq!(gvfs_daemon_pids(&missing), Vec::<u32>::new());
 }
 
@@ -63,7 +63,7 @@ fn marker_path_needs_a_runtime_dir() {
     assert_eq!(
         gvfs_probe_marker_path_in(Some(OsString::from("/run/user/1000"))),
         Some(std::path::PathBuf::from(
-            "/run/user/1000/strata-gvfs-probe-ok"
+            "/run/user/1000/beefilemanager-gvfs-probe-ok"
         ))
     );
 }

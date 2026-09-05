@@ -1,6 +1,6 @@
 # Unsafe Code Policy
 
-Strata is a safe-Rust codebase by default. Unsafe code is an exception for a narrow platform boundary, not a general implementation tool.
+BeeFileManager is a safe-Rust codebase by default. Unsafe code is an exception for a narrow platform boundary, not a general implementation tool.
 
 ## Requirements
 
@@ -38,7 +38,7 @@ CI runs Clippy with warnings treated as errors, so violations block merges.
 
 Location: `src/assets.rs::register_application_fonts`
 
-Reason: Fontconfig exposes application-private font registration through its C API, and the available safe wrapper does not expose that capability. Strata uses three small FFI calls during single-threaded startup and presents the rest of the application with a safe function.
+Reason: Fontconfig exposes application-private font registration through its C API, and the available safe wrapper does not expose that capability. BeeFileManager uses three small FFI calls during single-threaded startup and presents the rest of the application with a safe function.
 
 The operations are individually scoped and document:
 

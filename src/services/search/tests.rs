@@ -95,7 +95,7 @@ fn background_index_returns_results_for_queries_received_while_walking() {
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("the system clock should be after the Unix epoch")
         .as_nanos();
-    let root = std::env::temp_dir().join(format!("strata-search-{unique}"));
+    let root = std::env::temp_dir().join(format!("beefilemanager-search-{unique}"));
     fs::create_dir_all(root.join("nested")).expect("the search fixture should be created");
     fs::write(root.join("nested/needle.txt"), b"result")
         .expect("the search fixture file should be written");
@@ -143,7 +143,7 @@ fn unique_fixture_root(label: &str) -> PathBuf {
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("the system clock should be after the Unix epoch")
         .as_nanos();
-    std::env::temp_dir().join(format!("strata-search-{label}-{unique}"))
+    std::env::temp_dir().join(format!("beefilemanager-search-{label}-{unique}"))
 }
 
 fn wait_for_results(receiver: &std::sync::mpsc::Receiver<SearchEvent>) -> Option<SearchEvent> {

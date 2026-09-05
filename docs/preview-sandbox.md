@@ -1,6 +1,6 @@
 # Preview sandbox
 
-Strata treats files shown while browsing as untrusted. Native parsers do not receive the user's normal filesystem or network access.
+BeeFileManager treats files shown while browsing as untrusted. Native parsers do not receive the user's normal filesystem or network access.
 
 ## Sandboxed providers
 
@@ -17,10 +17,10 @@ Thumbnail rendering uses one helper at a time and queues at most 64 unique reque
 
 ## Isolation and limits
 
-Strata starts its own executable in a bubblewrap sandbox. The sandbox has:
+BeeFileManager starts its own executable in a bubblewrap sandbox. The sandbox has:
 
 - a new user, mount, PID, IPC, UTS, cgroup, and network namespace;
-- read-only access to `/usr`, required runtime libraries and font/ImageMagick configuration, the Strata executable, and exactly one canonicalized input file;
+- read-only access to `/usr`, required runtime libraries and font/ImageMagick configuration, the BeeFileManager executable, and exactly one canonicalized input file;
 - writable access only to private mode-0700 output and temporary directories;
 - an empty environment with a nonexistent home directory;
 - a 512 MB input limit for raster and PDF parsing, a 2 GB address-space limit allowing modern image loaders to start their isolated worker threads, a 512 MB sandbox file-size limit for decoder buffers, and a 32 MB parent-side output limit;
@@ -29,7 +29,7 @@ Strata starts its own executable in a bubblewrap sandbox. The sandbox has:
 
 Accelerated media previews receive only the devices required by their policy: VA-API gets safe `/dev/dri/renderD<digits>` nodes, while Vulkan and Automatic may also get `/dev/nvidia<digits>` and `/dev/nvidiactl`. They receive read-only `/sys` access for driver discovery. Software media previews, image, PDF, and thumbnail helpers receive no GPU devices or `/sys` mount.
 
-Strata reads PCI vendor and device IDs from `/sys/class/drm/renderD*/device` to detect AMD Polaris 10, 11, and 12 devices (`0x67c0–0x67df`, `0x67e0–0x67ff`, and `0x6980–0x699f`). Because preview encoding can hang on them, an unset acceleration preference resolves to software when any Polaris render node is present. The settings remain available as an explicit opt-in, after which the selected hardware policy receives the render node normally. Nodes with unreadable metadata retain the non-Polaris default.
+BeeFileManager reads PCI vendor and device IDs from `/sys/class/drm/renderD*/device` to detect AMD Polaris 10, 11, and 12 devices (`0x67c0–0x67df`, `0x67e0–0x67ff`, and `0x6980–0x699f`). Because preview encoding can hang on them, an unset acceleration preference resolves to software when any Polaris render node is present. The settings remain available as an explicit opt-in, after which the selected hardware policy receives the render node normally. Nodes with unreadable metadata retain the non-Polaris default.
 
 GPU acceleration expands the media helper's attack surface into the installed userspace and kernel GPU drivers; policy-specific device access keeps that exposure media-only and the existing namespaces and resource limits still apply.
 
